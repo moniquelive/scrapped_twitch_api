@@ -13,8 +13,24 @@ defmodule TwitchApi.ApiJson.Template do
     module_name = ModuleName.create_module_name(item)
     moduledoc = ModuleDoc.create_moduledoc(item)
     doc = Doc.create_doc(item)
+    aliass = Alias.get_alias(item)
+    headers = Method.Headers.get_headers(item)
+
+    template(item, module_name, moduledoc, doc, aliass, headers)
+  end
+
+  defp template(_, module_name, moduledoc, _, _, :not_supported) do
+    """
+    defmodule #{module_name}.NotSupported do
+      #{moduledoc}
+
+      # API method not supported
+    end
+    """
+  end
+
+  defp template(item, module_name, moduledoc, doc, aliass, _) do
     method = Method.create_method(item)
-    aliass = Alias.get_alias()
 
     """
     defmodule #{module_name} do

@@ -4,24 +4,24 @@ defmodule TwitchApi.Entitlements.GetCodeStatus do
 
   ## Example request from twitch api docs:
   ### descriptions:
-  
+
   ### requests:
   curl -X GET 'https://api.twitch.tv/helix/entitlements/codes?code=KUHXV-4GXYP-AKAKK&code=XZDDZ-5SIQR-RT5M3&user_id=156900877'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
    -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   {"data":[{"code":"KUHXV-4GXYP-AKAKK","status":"UNUSED"},{"code":"XZDDZ-5SIQR-RT5M3","status":"ALREADY_CLAIMED"}]}
-  
+
 
   """
 
   alias TwitchApi.MyFinch
-
+  alias TwitchApi.ApiJson.Template.Method.Headers
 
   @doc """
   ### Description:
@@ -31,10 +31,13 @@ defmodule TwitchApi.Entitlements.GetCodeStatus do
   Access is controlled via an app access token on the calling service. The client ID associated with the app access token must be approved by Twitch as part of a contracted arrangement.
   """
 
-  @spec call() :: {:ok, Finch.Response.t} | {:error, Exception.t}
-  def call() do
-    MyFinch.request("GET","https://api.twitch.tv/helix/entitlements/codes",
-    TwitchApi.ApiJson.Template.Method.Headers.config_headers(), nil)
+  @spec call() :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
+  def call do
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/entitlements/codes",
+      Headers.config_headers(),
+      nil
+    )
   end
-
 end

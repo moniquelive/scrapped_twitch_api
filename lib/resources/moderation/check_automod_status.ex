@@ -5,7 +5,7 @@ defmodule TwitchApi.Moderation.CheckAutoModStatus do
   ## Example request from twitch api docs:
   ### descriptions:
   Checks to see if the messages “Hello World!” and “Boooooo!” meets AutoMod requirements.
-  
+
   ### requests:
   curl -X POST 'https://api.twitch.tv/helix/moderation/enforcements/status'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
@@ -24,33 +24,36 @@ defmodule TwitchApi.Moderation.CheckAutoModStatus do
       }
     ]
    }'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
   Shows that message ID 123 meets the requirements and message ID 393 does not.
-  
+
   ### responses:
   {"data":[{"msg_id":"123","is_permitted":true},{"msg_id":"393","is_permitted":false}]}
-  
+
 
   """
 
   alias TwitchApi.MyFinch
-
+  alias TwitchApi.ApiJson.Template.Method.Headers
 
   @doc """
   ### Description:
   Determines whether a string message meets the channel’s AutoMod requirements.
 
   ### Required authentication:
-  
+
   """
 
-  @spec call() :: {:ok, Finch.Response.t} | {:error, Exception.t}
-  def call() do
-    MyFinch.request("POST","https://api.twitch.tv/helix/moderation/enforcements/status",
-    TwitchApi.ApiJson.Template.Method.Headers.config_headers(), nil)
+  @spec call() :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
+  def call do
+    MyFinch.request(
+      "POST",
+      "https://api.twitch.tv/helix/moderation/enforcements/status",
+      Headers.config_headers(),
+      nil
+    )
   end
-
 end

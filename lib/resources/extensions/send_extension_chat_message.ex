@@ -4,7 +4,7 @@ defmodule TwitchApi.Extensions.SendExtensionChatMessage do
 
   ## Example request from twitch api docs:
   ### descriptions:
-  
+
   ### requests:
   curl -X POST 'https://api.twitch.tv/helix/extensions/chat?broadcaster_id=237757755'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
@@ -14,38 +14,48 @@ defmodule TwitchApi.Extensions.SendExtensionChatMessage do
     "extension_id": "uo6dggojyb8d6soh92zknwmi5ej1q2",
     "extension_version": "0.0.9"
    }
-  
-  
+
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   204NoContent
-  
+
 
   """
 
   alias TwitchApi.MyFinch
-
+  alias TwitchApi.ApiJson.Template.Method.Headers
 
   @doc """
   ### Description:
   NEW Sends a specified chat message to a specified channel.
 
   ### Required authentication:
-  
+
   """
 
-  @typep broadcaster_id :: %{required(:broadcaster_id) => String.t()} # User ID of the broadcaster whose channel has the Extension activated.
-  @typep body_params :: %{required(:extension_id) => String.t(), # Client ID associated with the Extension.
-    required(:extension_version) => String.t(), # Version of the Extension sending this message.
-    required(:text) => String.t(), # Message for Twitch chat.Maximum =>  280 characters.
-    }| nil
-  @spec call(broadcaster_id, body_params) :: {:ok, Finch.Response.t} | {:error, Exception.t}
+  # User ID of the broadcaster whose channel has the Extension activated.
+  @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
+  # Client ID associated with the Extension.
+  @typep body_params ::
+           %{
+             required(:extension_id) => String.t(),
+             # Version of the Extension sending this message.
+             required(:extension_version) => String.t(),
+             # Message for Twitch chat.Maximum =>  280 characters.
+             required(:text) => String.t()
+           }
+           | nil
+  @spec call(broadcaster_id, body_params) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{broadcaster_id: broadcaster_id}, body_params) do
-    MyFinch.request("POST","https://api.twitch.tv/helix/extensions/chat?broadcaster_id=#{broadcaster_id}",
-    TwitchApi.ApiJson.Template.Method.Headers.config_headers(), body_params)
+    MyFinch.request(
+      "POST",
+      "https://api.twitch.tv/helix/extensions/chat?broadcaster_id=#{broadcaster_id}",
+      Headers.config_headers(),
+      body_params
+    )
   end
-
 end

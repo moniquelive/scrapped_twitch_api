@@ -26,9 +26,11 @@ defmodule TwitchApi.ApiJson.Template.Method do
   end
 
   defp create_normal_method(http_method, url, headers, {specs, method_params, request_params}) do
+    parsed_method_params = Headers.parse_method_params(method_params)
+
     """
     @spec call(#{specs}) :: {:ok, Finch.Response.t} | {:error, Exception.t}
-      def call(#{method_params}) do
+      def call#{parsed_method_params} do
         MyFinch.request(\"#{http_method}\",\"#{url}\"#{headers}#{request_params})
       end
     """
@@ -53,11 +55,11 @@ defmodule TwitchApi.ApiJson.Template.Method do
 
   defp methods_map(query_params, http_method, url, headers, {_, method_params, request_params}) do
     Enum.map(query_params, fn {query_param, _type, query_param_string} ->
+      parsed_param = Query.parse_query_param_type(query_param.param)
+
       """
       def call(%#{query_param_string}#{method_params}) do
-          MyFinch.request(\"#{http_method}\",\"#{url}?#{query_param.param}=\#{#{query_param.param}}\"#{
-        headers
-      }#{request_params})
+          MyFinch.request(\"#{http_method}\",\"#{url}?#{query_param.param}=\#{#{parsed_param}}\"#{headers}#{request_params})
         end
       """
     end)
@@ -65,8 +67,10 @@ defmodule TwitchApi.ApiJson.Template.Method do
 
   defp type_params(query_params) do
     query_params
-    |> Enum.map(fn {query_param, _, _} -> query_param.param end)
+    |> Enum.map(fn {query_param, _, _} -> parse(query_param.param) end)
     |> Enum.intersperse(" | ")
     |> Enum.map_join("", & &1)
   end
+
+  defp parse(param), do: Query.parse_query_param_type(param)
 end

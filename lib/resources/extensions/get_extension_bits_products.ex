@@ -4,37 +4,43 @@ defmodule TwitchApi.Extensions.GetExtensionBitsProducts do
 
   ## Example request from twitch api docs:
   ### descriptions:
-  
+
   ### requests:
   curl -X GET 'https://api.twitch.tv/helix/bits/extensions?should_include_all=true'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
    -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   {"data":[{"sku":"1010","cost":{"amount":990,"type":"bits"},"in_development":true,"display_name":"Rusty Crate 2","expiration":"2021-05-18T09:10:13.397Z","is_broadcast":false}]}
-  
+
 
   """
 
   alias TwitchApi.MyFinch
-
+  alias TwitchApi.ApiJson.Template.Method.Headers
 
   @doc """
   ### Description:
   NEW Gets a list of Bits products that belongs to an Extension.
 
   ### Required authentication:
-  
+
   """
 
-  @spec call() :: {:ok, Finch.Response.t} | {:error, Exception.t}
-  def call() do
-    MyFinch.request("GET","https://api.twitch.tv/helix/bits/extensions",
-    TwitchApi.ApiJson.Template.Method.Headers.config_headers(), nil)
-  end
+  # Whether Bits products that are disabled/expired should be included in the response.Default: false.
+  @type should_include_all :: %{required(:should_include_all) => boolean}
 
+  @spec call(should_include_all) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
+  def call(%{should_include_all: should_include_all}) do
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/bits/extensions?should_include_all=#{should_include_all}",
+      Headers.config_headers(),
+      nil
+    )
+  end
 end

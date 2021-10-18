@@ -4,24 +4,24 @@ defmodule TwitchApi.Subscriptions.GetBroadcasterSubscriptions do
 
   ## Example request from twitch api docs:
   ### descriptions:
-  
+
   ### requests:
   curl -X GET 'https://api.twitch.tv/helix/subscriptions?broadcaster_id=141981764'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
    -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   {"data":[{"broadcaster_id":"141981764","broadcaster_login":"twitchdev","broadcaster_name":"TwitchDev","gifter_id":"12826","gifter_login":"twitch","gifter_name":"Twitch","is_gift":true,"tier":"1000","plan_name":"Channel Subscription (twitchdev)","user_id":"527115020","user_name":"twitchgaming","user_login":"twitchgaming"},...],"pagination":{"cursor":"xxxx"},"total":13}
-  
+
 
   """
 
   alias TwitchApi.MyFinch
-
+  alias TwitchApi.ApiJson.Template.Method.Headers
 
   @doc """
   ### Description:
@@ -35,12 +35,50 @@ defmodule TwitchApi.Subscriptions.GetBroadcasterSubscriptions do
    scope from within the Twitch Extensions manager.
   """
 
-  @typep broadcaster_id :: %{required(:broadcaster_id) => String.t()} # User ID of the broadcaster. Must match the User ID in the Bearer token.
-  
-  @spec call(broadcaster_id) :: {:ok, Finch.Response.t} | {:error, Exception.t}
+  # User ID of the broadcaster. Must match the User ID in the Bearer token.
+  @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
+  # Filters results to only include potential subscriptions made by the provided user IDs. Accepts up to 100 values.
+  @type user_id :: %{required(:user_id) => String.t()}
+  # Cursor for forward pagination: tells the server where to start fetching the next set of results in a multi-page response. This applies only to queries without user_id. If a user_id is specified, it supersedes any cursor/offset combinations. The cursor value specified here is from the pagination response field of a prior query.
+  @type after_query_param :: %{required(:after_query_param) => String.t()}
+  # Maximum number of objects to return. Maximum: 100. Default: 20.
+  @type first :: %{required(:first) => String.t()}
+
+  @spec call(broadcaster_id | user_id | after_query_param | first) ::
+          {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{broadcaster_id: broadcaster_id}) do
-    MyFinch.request("GET","https://api.twitch.tv/helix/subscriptions?broadcaster_id=#{broadcaster_id}",
-    TwitchApi.ApiJson.Template.Method.Headers.config_headers(), nil)
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/subscriptions?broadcaster_id=#{broadcaster_id}",
+      Headers.config_headers(),
+      nil
+    )
   end
 
+  def call(%{user_id: user_id}) do
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/subscriptions?user_id=#{user_id}",
+      Headers.config_headers(),
+      nil
+    )
+  end
+
+  def call(%{after: after_query_param}) do
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/subscriptions?after=#{after_query_param}",
+      Headers.config_headers(),
+      nil
+    )
+  end
+
+  def call(%{first: first}) do
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/subscriptions?first=#{first}",
+      Headers.config_headers(),
+      nil
+    )
+  end
 end

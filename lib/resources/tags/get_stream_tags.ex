@@ -5,28 +5,28 @@ defmodule TwitchApi.Tags.GetStreamTags do
   ## Example request from twitch api docs:
   ### descriptions:
   This example gets the tags on the TwitchGaming channel.
-  
+
   ### requests:
   curl -X GET
   'https://api.twitch.tv/helix/streams/tags?broadcaster_id=527115020'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
    -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   {"data":[{"tag_id":"6ea6bca4-4712-4ab9-a906-e3336a9d8039","is_auto":true,"localization_names":{"bg-bg":"английски","cs-cz":"Angličtina","da-dk":"Engelsk","de-de":"Englisch","el-gr":"Αγγλικά","en-us":"English",...},"localization_descriptions":{"bg-bg":"За потоци с използване на английски","cs-cz":"Pro vysílání obsahující angličtinu.","da-dk":"Til streams, hvori der indgår engelsk","de-de":"Für Streams auf Englisch.","el-gr":"Για μεταδόσεις που περιλαμβάνουν τη χρήση Αγγλικών","en-us":"For streams featuring the use of English",...}}]}
   # Twitch CLI example that gets the list of tags on the TwitchGaming channel.
   twitch api get /tags/streams -qbroadcaster_id=527115020
-  
-  
+
+
 
   """
 
   alias TwitchApi.MyFinch
-
+  alias TwitchApi.ApiJson.Template.Method.Headers
 
   @doc """
   ### Description:
@@ -36,12 +36,16 @@ defmodule TwitchApi.Tags.GetStreamTags do
   Requires an application OAuth access token.
   """
 
-  @typep broadcaster_id :: %{required(:broadcaster_id) => String.t()} # The user ID of the channel to get the tags from.
-  
-  @spec call(broadcaster_id) :: {:ok, Finch.Response.t} | {:error, Exception.t}
-  def call(%{broadcaster_id: broadcaster_id}) do
-    MyFinch.request("GET","https://api.twitch.tv/helix/streams/tags?broadcaster_id=#{broadcaster_id}",
-    TwitchApi.ApiJson.Template.Method.Headers.config_headers(), nil)
-  end
+  # The user ID of the channel to get the tags from.
+  @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
 
+  @spec call(broadcaster_id) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
+  def call(%{broadcaster_id: broadcaster_id}) do
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/streams/tags?broadcaster_id=#{broadcaster_id}",
+      Headers.config_headers(),
+      nil
+    )
+  end
 end

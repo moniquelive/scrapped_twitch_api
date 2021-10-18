@@ -4,7 +4,7 @@ defmodule TwitchApi.Extensions.SendExtensionPubSubMessage do
 
   ## Example request from twitch api docs:
   ### descriptions:
-  
+
   ### requests:
   curl -X POST 'https://api.twitch.tv/helix/extensions/pubsub'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
@@ -14,36 +14,47 @@ defmodule TwitchApi.Extensions.SendExtensionPubSubMessage do
     "broadcaster_id": "141981764",
     "target": ["broadcast"]
    }'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   204NoContent
-  
+
 
   """
 
   alias TwitchApi.MyFinch
-
+  alias TwitchApi.ApiJson.Template.Method.Headers
 
   @doc """
   ### Description:
   NEW Forward a message using the same mechanism as the send JavaScript helper function.
 
   ### Required authentication:
-  
+
   """
 
-  @spec call(%{required(:broadcaster_id) => String.t(), # ID of the broadcaster receiving the payload. This is not required if is_global_broadcast is set to true.
-    required(:is_global_broadcast) => boolean, # Indicates if the message should be sent to all channels where your Extension is active.Default =>  false.
-    required(:message) => String.t(), # String-encoded JSON message to be sent.
-    required(:target) => list, # Array of strings for valid PubSub targets. Valid values =>  \broadcast\ \global\ \whisper-<user-id>\
-    }| nil) :: {:ok, Finch.Response.t} | {:error, Exception.t}
+  # ID of the broadcaster receiving the payload. This is not required if is_global_broadcast is set to true.
+  @spec call(
+          %{
+            required(:broadcaster_id) => String.t(),
+            # Indicates if the message should be sent to all channels where your Extension is active.Default =>  false.
+            required(:is_global_broadcast) => boolean,
+            # String-encoded JSON message to be sent.
+            required(:message) => String.t(),
+            # Array of strings for valid PubSub targets. Valid values =>  \broadcast\ \global\ \whisper-<user-id>\
+            required(:target) => list
+          }
+          | nil
+        ) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(body_params) do
-    MyFinch.request("POST","https://api.twitch.tv/helix/extensions/pubsub",
-    TwitchApi.ApiJson.Template.Method.Headers.config_headers(), body_params)
+    MyFinch.request(
+      "POST",
+      "https://api.twitch.tv/helix/extensions/pubsub",
+      Headers.config_headers(),
+      body_params
+    )
   end
-
 end

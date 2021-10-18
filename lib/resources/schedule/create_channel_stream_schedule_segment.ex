@@ -5,7 +5,7 @@ defmodule TwitchApi.Schedule.CreateChannelStreamScheduleSegment do
   ## Example request from twitch api docs:
   ### descriptions:
   Create a non-recurring stream schedule segment for the TwitchDev channel’s stream schedule.
-  
+
   ### requests:
   curl -X POST 'https://api.twitch.tv/helix/schedule/segment?broadcaster_id=141981764'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
@@ -17,37 +17,47 @@ defmodule TwitchApi.Schedule.CreateChannelStreamScheduleSegment do
     "category_id": "509670",
     "title": "TwitchDev Monthly Update // July 1, 2021"
    }'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   {"data":{"segments":[{"id":"eyJzZWdtZW50SUQiOiJlNGFjYzcyNC0zNzFmLTQwMmMtODFjYS0yM2FkYTc5NzU5ZDQiLCJpc29ZZWFyIjoyMDIxLCJpc29XZWVrIjoyNn0=","start_time":"2021-07-01T18:00:00Z","end_time":"2021-07-01T19:00:00Z","title":"TwitchDev Monthly Update // July 1, 2021","canceled_until":null,"category":{"id":"509670","name":"Science & Technology"},"is_recurring":false}],"broadcaster_id":"141981764","broadcaster_name":"TwitchDev","broadcaster_login":"twitchdev","vacation":null}}
-  
+
 
   """
 
   alias TwitchApi.MyFinch
-
+  alias TwitchApi.ApiJson.Template.Method.Headers
 
   @doc """
   ### Description:
   NEW Create a single scheduled broadcast or a recurring scheduled broadcast for a channel’s stream schedule.
 
   ### Required authentication:
-  
+
   """
 
-  @typep broadcaster_id :: %{required(:broadcaster_id) => String.t()} # User ID of the broadcaster who owns the channel streaming schedule. Provided broadcaster_id must match the user_id in the user OAuth token.Maximum: 1
-  @typep body_params :: %{required(:is_recurring) => boolean, # Indicates if the scheduled broadcast is recurring weekly.
-    required(:start_time) => String.t(), # Start time for the scheduled broadcast specified in RFC3339 format.
-    required(:timezone) => String.t(), # The timezone of the application creating the scheduled broadcast using the IANA time zone database format.
-    }| nil
-  @spec call(broadcaster_id, body_params) :: {:ok, Finch.Response.t} | {:error, Exception.t}
+  # User ID of the broadcaster who owns the channel streaming schedule. Provided broadcaster_id must match the user_id in the user OAuth token.Maximum: 1
+  @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
+  # Indicates if the scheduled broadcast is recurring weekly.
+  @typep body_params ::
+           %{
+             required(:is_recurring) => boolean,
+             # Start time for the scheduled broadcast specified in RFC3339 format.
+             required(:start_time) => String.t(),
+             # The timezone of the application creating the scheduled broadcast using the IANA time zone database format.
+             required(:timezone) => String.t()
+           }
+           | nil
+  @spec call(broadcaster_id, body_params) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{broadcaster_id: broadcaster_id}, body_params) do
-    MyFinch.request("POST","https://api.twitch.tv/helix/schedule/segment?broadcaster_id=#{broadcaster_id}",
-    TwitchApi.ApiJson.Template.Method.Headers.config_headers(), body_params)
+    MyFinch.request(
+      "POST",
+      "https://api.twitch.tv/helix/schedule/segment?broadcaster_id=#{broadcaster_id}",
+      Headers.config_headers(),
+      body_params
+    )
   end
-
 end

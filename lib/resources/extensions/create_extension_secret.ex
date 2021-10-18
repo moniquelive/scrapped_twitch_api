@@ -4,37 +4,43 @@ defmodule TwitchApi.Extensions.CreateExtensionSecret do
 
   ## Example request from twitch api docs:
   ### descriptions:
-  
+
   ### requests:
   curl -X POST 'https://api.twitch.tv/helix/extensions/jwt/secrets?extension_id=uo6dggojyb8d6soh92zknwmi5ej1q2&delay=600'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
    -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   {"data":[{"format_version":1,"secrets":[{"content":"old-secret","active_at":"2021-03-29T06:58:40.858343036Z","expires_at":"2021-04-22T05:21:54.99261682Z"},{"content":"new-secret","active_at":"2021-04-22T04:16:54.996365329Z","expires_at":"2121-03-29T04:16:54.996365329Z"}]}]}
-  
+
 
   """
 
   alias TwitchApi.MyFinch
-
+  alias TwitchApi.ApiJson.Template.Method.Headers
 
   @doc """
   ### Description:
   NEW Creates a JWT signing secret for a specific Extension
 
   ### Required authentication:
-  
+
   """
 
-  @spec call() :: {:ok, Finch.Response.t} | {:error, Exception.t}
-  def call() do
-    MyFinch.request("POST","https://api.twitch.tv/helix/extensions/jwt/secrets",
-    TwitchApi.ApiJson.Template.Method.Headers.config_headers(), nil)
-  end
+  # JWT signing activation delay for the newly created secret in seconds.Minumum: 300. Default: 300.
+  @type delay :: %{required(:delay) => integer}
 
+  @spec call(delay) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
+  def call(%{delay: delay}) do
+    MyFinch.request(
+      "POST",
+      "https://api.twitch.tv/helix/extensions/jwt/secrets?delay=#{delay}",
+      Headers.config_headers(),
+      nil
+    )
+  end
 end

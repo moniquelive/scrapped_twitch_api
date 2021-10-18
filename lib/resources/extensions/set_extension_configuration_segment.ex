@@ -4,7 +4,7 @@ defmodule TwitchApi.Extensions.SetExtensionConfigurationSegment do
 
   ## Example request from twitch api docs:
   ### descriptions:
-  
+
   ### requests:
   curl -X PUT 'https://api.twitch.tv/helix/extensions/configurations'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
@@ -15,34 +15,43 @@ defmodule TwitchApi.Extensions.SetExtensionConfigurationSegment do
     "version": "0.0.1",
     "content": "hello config!"
    }'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   204NoContent
-  
+
 
   """
 
   alias TwitchApi.MyFinch
-
+  alias TwitchApi.ApiJson.Template.Method.Headers
 
   @doc """
   ### Description:
   NEW Sets a single configuration segment of any type. The segment type is specified as a body parameter.
 
   ### Required authentication:
-  
+
   """
 
-  @spec call(%{required(:extension_id) => String.t(), # ID for the Extension which the configuration is for.
-    required(:segment) => String.t(), # Configuration type. Valid values are \global\ \developer\ or \broadcaster\.
-    }| nil) :: {:ok, Finch.Response.t} | {:error, Exception.t}
+  # ID for the Extension which the configuration is for.
+  @spec call(
+          %{
+            required(:extension_id) => String.t(),
+            # Configuration type. Valid values are \global\ \developer\ or \broadcaster\.
+            required(:segment) => String.t()
+          }
+          | nil
+        ) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(body_params) do
-    MyFinch.request("PUT","https://api.twitch.tv/helix/extensions/configurations",
-    TwitchApi.ApiJson.Template.Method.Headers.config_headers(), body_params)
+    MyFinch.request(
+      "PUT",
+      "https://api.twitch.tv/helix/extensions/configurations",
+      Headers.config_headers(),
+      body_params
+    )
   end
-
 end

@@ -6,6 +6,7 @@ defmodule TwitchApi.ApiJson.Item do
 
   @twitch_api_scrapped_json "https://raw.githubusercontent.com/kamiyuzu/twitch_api_scraper/master/lib/fixtures/json/twitch_api.json"
 
+  alias __MODULE__
   alias TwitchApi.MyFinch
   alias TwitchApi.ApiJson.Item.{Category, Doc, Request}
 
@@ -41,9 +42,10 @@ defmodule TwitchApi.ApiJson.Item do
   @doc """
   Fetchs the twitch api json items
   """
-  @spec get_api_items() :: [Item.t()]
-  def get_api_items() do
-    {:ok, %Finch.Response{body: twitch_api_json}} = MyFinch.request(:get, @twitch_api_scrapped_json)
+  @spec get_api_items :: [Item.t()]
+  def get_api_items do
+    {:ok, %Finch.Response{body: twitch_api_json}} =
+      MyFinch.request(:get, @twitch_api_scrapped_json)
 
     twitch_api_json
     |> Jason.decode!()
@@ -55,6 +57,6 @@ defmodule TwitchApi.ApiJson.Item do
   defp create_api_json_items(item) do
     %__MODULE__{}
     |> changeset(item)
-    |> schema()
+    |> schema
   end
 end

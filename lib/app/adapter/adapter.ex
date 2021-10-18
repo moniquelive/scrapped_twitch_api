@@ -1,4 +1,8 @@
 defmodule TwitchApi.MyFinch do
+  @moduledoc """
+  Provides funcion wrapper for making Finch requests
+  """
+
   @spec request(
           Finch.Request.method(),
           Finch.Request.url()

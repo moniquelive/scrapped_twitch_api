@@ -5,14 +5,14 @@ defmodule TwitchApi.Schedule.GetChanneliCalendar do
   ## Example request from twitch api docs:
   ### descriptions:
   Returns all scheduled broadcasts from the TwitchDev channel’s stream schedule as an iCalendar.
-  
+
   ### requests:
   curl -X GET 'https://api.twitch.tv/helix/schedule/icalendar?broadcaster_id=141981764'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   BEGIN:VCALENDAR
   PRODID:-//twitch.tv//StreamSchedule//1.0
@@ -30,28 +30,32 @@ defmodule TwitchApi.Schedule.GetChanneliCalendar do
   CATEGORIES:Science & Technology
   END:VEVENT
   END:VCALENDAR%
-  
-  
+
+
 
   """
 
   alias TwitchApi.MyFinch
-
+  alias TwitchApi.ApiJson.Template.Method.Headers
 
   @doc """
   ### Description:
   NEW Gets all scheduled broadcasts from a channel’s stream schedule as an iCalendar.
 
   ### Required authentication:
-  
+
   """
 
-  @typep broadcaster_id :: %{required(:broadcaster_id) => String.t()} # User ID of the broadcaster who owns the channel streaming schedule.Maximum: 1
-  
-  @spec call(broadcaster_id) :: {:ok, Finch.Response.t} | {:error, Exception.t}
-  def call(%{broadcaster_id: broadcaster_id}) do
-    MyFinch.request("GET","https://api.twitch.tv/helix/schedule/icalendar?broadcaster_id=#{broadcaster_id}",
-    TwitchApi.ApiJson.Template.Method.Headers.config_headers(), nil)
-  end
+  # User ID of the broadcaster who owns the channel streaming schedule.Maximum: 1
+  @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
 
+  @spec call(broadcaster_id) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
+  def call(%{broadcaster_id: broadcaster_id}) do
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/schedule/icalendar?broadcaster_id=#{broadcaster_id}",
+      Headers.config_headers(),
+      nil
+    )
+  end
 end

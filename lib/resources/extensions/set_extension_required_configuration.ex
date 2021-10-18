@@ -4,7 +4,7 @@ defmodule TwitchApi.Extensions.SetExtensionRequiredConfiguration do
 
   ## Example request from twitch api docs:
   ### descriptions:
-  
+
   ### requests:
   curl -X PUT 'https://api.twitch.tv/helix/extensions/required_configuration?broadcaster_id=274637212'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
@@ -14,37 +14,47 @@ defmodule TwitchApi.Extensions.SetExtensionRequiredConfiguration do
     "extension_id": "uo6dggojyb8d6soh92zknwmi5ej1q2",
     "extension_version": "0.0.1"
    }'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   204NoContent
-  
+
 
   """
 
   alias TwitchApi.MyFinch
-
+  alias TwitchApi.ApiJson.Template.Method.Headers
 
   @doc """
   ### Description:
   NEW Enable activation of a specified Extension, after any required broadcaster configuration is correct.
 
   ### Required authentication:
-  
+
   """
 
-  @typep broadcaster_id :: %{required(:broadcaster_id) => String.t()} # User ID of the broadcaster who has activated the specified Extension on their channel.
-  @typep body_params :: %{required(:configuration_version) => String.t(), # The version of the configuration to use with the Extension.
-    required(:extension_id) => String.t(), # ID for the Extension to activate.
-    required(:extension_version) => String.t(), # The version fo the Extension to release.
-    }| nil
-  @spec call(broadcaster_id, body_params) :: {:ok, Finch.Response.t} | {:error, Exception.t}
+  # User ID of the broadcaster who has activated the specified Extension on their channel.
+  @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
+  # The version of the configuration to use with the Extension.
+  @typep body_params ::
+           %{
+             required(:configuration_version) => String.t(),
+             # ID for the Extension to activate.
+             required(:extension_id) => String.t(),
+             # The version fo the Extension to release.
+             required(:extension_version) => String.t()
+           }
+           | nil
+  @spec call(broadcaster_id, body_params) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{broadcaster_id: broadcaster_id}, body_params) do
-    MyFinch.request("PUT","https://api.twitch.tv/helix/extensions/required_configuration?broadcaster_id=#{broadcaster_id}",
-    TwitchApi.ApiJson.Template.Method.Headers.config_headers(), body_params)
+    MyFinch.request(
+      "PUT",
+      "https://api.twitch.tv/helix/extensions/required_configuration?broadcaster_id=#{broadcaster_id}",
+      Headers.config_headers(),
+      body_params
+    )
   end
-
 end

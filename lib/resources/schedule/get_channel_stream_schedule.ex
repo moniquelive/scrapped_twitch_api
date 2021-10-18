@@ -5,39 +5,99 @@ defmodule TwitchApi.Schedule.GetChannelStreamSchedule do
   ## Example request from twitch api docs:
   ### descriptions:
   Returns all scheduled events from the TwitchDev channel’s stream schedule.
-  
+
   ### requests:
   curl -X GET 'https://api.twitch.tv/helix/schedule?broadcaster_id=141981764'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
    -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   {"data":{"segments":[{"id":"eyJzZWdtZW50SUQiOiJlNGFjYzcyNC0zNzFmLTQwMmMtODFjYS0yM2FkYTc5NzU5ZDQiLCJpc29ZZWFyIjoyMDIxLCJpc29XZWVrIjoyNn0=","start_time":"2021-07-01T18:00:00Z","end_time":"2021-07-01T19:00:00Z","title":"TwitchDev Monthly Update // July 1, 2021","canceled_until":null,"category":{"id":"509670","name":"Science & Technology"},"is_recurring":false},...],"broadcaster_id":"141981764","broadcaster_name":"TwitchDev","broadcaster_login":"twitchdev","vacation":null},"pagination":{}}
-  
+
 
   """
 
   alias TwitchApi.MyFinch
-
+  alias TwitchApi.ApiJson.Template.Method.Headers
 
   @doc """
   ### Description:
   NEW Gets all scheduled broadcasts or specific scheduled broadcasts from a channel’s stream schedule.
 
   ### Required authentication:
-  
+
   """
 
-  @typep broadcaster_id :: %{required(:broadcaster_id) => String.t()} # User ID of the broadcaster who owns the channel streaming schedule.Maximum: 1
-  
-  @spec call(broadcaster_id) :: {:ok, Finch.Response.t} | {:error, Exception.t}
+  # User ID of the broadcaster who owns the channel streaming schedule.Maximum: 1
+  @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
+  # The ID of the stream segment to return.Maximum: 100.
+  @type id :: %{required(:id) => String.t()}
+  # A timestamp in RFC3339 format to start returning stream segments from. If not specified, the current date and time is used.
+  @type start_time :: %{required(:start_time) => String.t()}
+  # A timezone offset for the requester specified in minutes. This is recommended to ensure stream segments are returned for the correct week. For example, a timezone that is +4 hours from GMT would be “240.” If not specified, “0” is used for GMT.
+  @type utc_offset :: %{required(:utc_offset) => String.t()}
+  # Maximum number of stream segments to return.Maximum: 25. Default: 20.
+  @type first :: %{required(:first) => integer}
+  # Cursor for forward pagination: tells the server where to start fetching the next set of results in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+  @type after_query_param :: %{required(:after_query_param) => String.t()}
+
+  @spec call(broadcaster_id | id | start_time | utc_offset | first | after_query_param) ::
+          {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{broadcaster_id: broadcaster_id}) do
-    MyFinch.request("GET","https://api.twitch.tv/helix/schedule?broadcaster_id=#{broadcaster_id}",
-    TwitchApi.ApiJson.Template.Method.Headers.config_headers(), nil)
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/schedule?broadcaster_id=#{broadcaster_id}",
+      Headers.config_headers(),
+      nil
+    )
   end
 
+  def call(%{id: id}) do
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/schedule?id=#{id}",
+      Headers.config_headers(),
+      nil
+    )
+  end
+
+  def call(%{start_time: start_time}) do
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/schedule?start_time=#{start_time}",
+      Headers.config_headers(),
+      nil
+    )
+  end
+
+  def call(%{utc_offset: utc_offset}) do
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/schedule?utc_offset=#{utc_offset}",
+      Headers.config_headers(),
+      nil
+    )
+  end
+
+  def call(%{first: first}) do
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/schedule?first=#{first}",
+      Headers.config_headers(),
+      nil
+    )
+  end
+
+  def call(%{after: after_query_param}) do
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/schedule?after=#{after_query_param}",
+      Headers.config_headers(),
+      nil
+    )
+  end
 end

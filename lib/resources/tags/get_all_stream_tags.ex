@@ -5,30 +5,30 @@ defmodule TwitchApi.Tags.GetAllStreamTags do
   ## Example request from twitch api docs:
   ### descriptions:
   This gets the first page of stream tags that Twitch defines.
-  
+
   ### requests:
   curl -X GET 'https://api.twitch.tv/helix/tags/streams'  
    -H'Authorization: Bearer 2gbdx6oar67tqtcmt49t3wpcgycthx'  
    -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   {"data":[{"tag_id":"621fb5bf-5498-4d8f-b4ac-db4d40d401bf","is_auto":false,"localization_names":{"bg-bg":"Изчистване на 1 кредит","cs-cz":"1 čistý kredit","da-dk":"1 credit klaret","de-de":"Mit 1 Leben abschließen","el-gr":"1 μόνο πίστωση","en-us":"1 Credit Clear",...},"localization_descriptions":{"bg-bg":"За потоци с акцент върху завършване на аркадна игра с монети, в която не се използва продължаване","cs-cz":"Pro vysílání s důrazem na plnění mincových arkádových her bez použití pokračování.","da-dk":"Til streams med vægt på at gennemføre et arkadespil uden at bruge continues","de-de":"Für Streams mit dem Ziel, ein Coin-op-Arcade-Game mit nur einem Leben abzuschließen.","el-gr":"Για μεταδόσεις με έμφαση στην ολοκλήρωση παλαιού τύπου ηλεκτρονικών παιχνιδιών που λειτουργούν με κέρμα, χωρίς να χρησιμοποιούν συνέχειες","en-us":"For streams with an emphasis on completing a coin-op arcade game without using any continues",...}},...],"pagination":{"cursor":"eyJiI..."}}
   # Twitch CLI examples that:# Gets the first page of stream tags.
   twitch api get /tags/streams
-  
+
   # Get the specified stream tags.
   twitch api get /tags/streams -qtag_id=39490173-ed5f-4271-96a8-26ab546ee1e9 -qtag_id=233f4789-1ad0-403c-aaf9-7d37a22264e7
-  
-  
+
+
 
   """
 
   alias TwitchApi.MyFinch
-
+  alias TwitchApi.ApiJson.Template.Method.Headers
 
   @doc """
   ### Description:
@@ -38,10 +38,39 @@ defmodule TwitchApi.Tags.GetAllStreamTags do
   Requires an application OAuth access token.
   """
 
-  @spec call() :: {:ok, Finch.Response.t} | {:error, Exception.t}
-  def call() do
-    MyFinch.request("GET","https://api.twitch.tv/helix/tags/streams",
-    TwitchApi.ApiJson.Template.Method.Headers.config_headers(), nil)
+  # The cursor used to get the next page of results. The pagination object in the response contains the cursor’s value.The after and tag_id query parameters are mutually exclusive.
+  @type after_query_param :: %{required(:after_query_param) => String.t()}
+  # The maximum number of tags to return per page.Maximum: 100. Default: 20.
+  @type first :: %{required(:first) => integer}
+  # An ID that identifies a specific tag to return. Include the query parameter for each tag you want returned. For example, tag_id=123&tag_id=456. You may specify a maximum of 100 IDs.
+  @type tag_id :: %{required(:tag_id) => String.t()}
+
+  @spec call(after_query_param | first | tag_id) ::
+          {:ok, Finch.Response.t()} | {:error, Exception.t()}
+  def call(%{after: after_query_param}) do
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/tags/streams?after=#{after_query_param}",
+      Headers.config_headers(),
+      nil
+    )
   end
 
+  def call(%{first: first}) do
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/tags/streams?first=#{first}",
+      Headers.config_headers(),
+      nil
+    )
+  end
+
+  def call(%{tag_id: tag_id}) do
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/tags/streams?tag_id=#{tag_id}",
+      Headers.config_headers(),
+      nil
+    )
+  end
 end

@@ -1,0 +1,60 @@
+name: Elixir CD
+
+on:
+  schedule:
+  - cron: "0 8 * * *"
+
+jobs:
+  build:
+
+    name: Test update commit and push
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Elixir
+      uses: erlef/setup-elixir@885971a72ed1f9240973bd92ab57af8c1aa68f24
+      with:
+        elixir-version: '1.12.2' # Define the elixir version [required]
+        otp-version: '23.2.5' # Define the OTP version [required]
+    - name: Restore dependencies cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          deps
+          _build
+        key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-mix-
+    - name: Install dependencies
+      run: mix deps.get
+    - name: Run mix format
+      run: mix format
+    - name: Run mix task
+      run: ./export.sh
+    - name: Push tests to coveralls
+      if: ${{ success() }}
+      run: mix coveralls.github
+      env:
+        MIX_ENV: test
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Simple commit
+      if: ${{ success() }}
+      uses: zwaldowski/git-commit-action@v1
+      with:
+        working_directory: . # optional, default is .
+        commit_message: Automatic commit by github periodic action # default is Automated commit
+        author_name: kamiyuzu # optional, default is GitHub Actions
+        author_email: alberto.re.arr@gmail.com # optional, default is actions@github.com
+    - name: Push to main
+      if: ${{ success() }}
+      uses: mikeal/publish-to-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH_NAME: 'main' #optional defaults to master
+    - name: Create release
+      if: ${{ success() }}
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        prerelease: false

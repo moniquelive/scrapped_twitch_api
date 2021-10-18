@@ -7,8 +7,8 @@ defmodule TwitchApi.Application do
 
   def start(_type, _args) do
     children = [
-      {Finch, name: MyFinch}
-      # {Finch, name: MyFinch, pools: %{:default => [protocol: :http2]}}
+      {Finch, name: MyFinch},
+      {TwitchApi.AppAccessToken, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

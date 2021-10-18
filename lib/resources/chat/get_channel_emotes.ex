@@ -5,43 +5,47 @@ defmodule TwitchApi.Chat.GetChannelEmotes do
   ## Example request from twitch api docs:
   ### descriptions:
   This example returns custom emotes defined in the TwitchDev channel.
-  
+
   ### requests:
   curl -X GET 'https://api.twitch.tv/helix/chat/emotes?broadcaster_id=141981764'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
    -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   {"data":[{"id":"304456832","name":"twitchdevPitchfork","images":{"url_1x":"https://static-cdn.jtvnw.net/emoticons/v2/304456832/static/light/1.0","url_2x":"https://static-cdn.jtvnw.net/emoticons/v2/304456832/static/light/2.0","url_4x":"https://static-cdn.jtvnw.net/emoticons/v2/304456832/static/light/3.0"},"tier":"1000","emote_type":"subscriptions","emote_set_id":"301590448","format":["static"],"scale":["1.0","2.0","3.0"],"theme_mode":["light","dark"]},...{"id":"emotesv2_4c3b4ed516de493bbcd2df2f5d450f49","name":"twitchdevHyperPitchfork","images":{"url_1x":"https://static-cdn.jtvnw.net/emoticons/v2/emotesv2_4c3b4ed516de493bbcd2df2f5d450f49/static/light/1.0","url_2x":"https://static-cdn.jtvnw.net/emoticons/v2/emotesv2_4c3b4ed516de493bbcd2df2f5d450f49/static/light/2.0","url_4x":"https://static-cdn.jtvnw.net/emoticons/v2/emotesv2_4c3b4ed516de493bbcd2df2f5d450f49/static/light/3.0"},"tier":"1000","emote_type":"subscriptions","emote_set_id":"318939165","format":["static","animated"],"scale":["1.0","2.0","3.0"],"theme_mode":["light","dark"]},],"template":"https://static-cdn.jtvnw.net/emoticons/v2/{{id}}/{{format}}/{{theme_mode}}/{{scale}}"}
   # Twitch CLI example that gets the custom emotes for the specified channel.
-  
+
   twitch api get /chat/emotes -qbroadcaster_id=141981764
-  
-  
+
+
 
   """
 
   alias TwitchApi.MyFinch
-
+  alias TwitchApi.ApiJson.Template.Method.Headers
 
   @doc """
   ### Description:
   NEW Gets all emotes that the specified Twitch channel created. For example, subscriber emotes, follower emotes, and Bits tier emotes.
 
   ### Required authentication:
-  
+
   """
 
-  @typep broadcaster_id :: %{required(:broadcaster_id) => String.t()} # An ID that identifies the broadcaster to get the emotes from.
-  
-  @spec call(broadcaster_id) :: {:ok, Finch.Response.t} | {:error, Exception.t}
-  def call(%{broadcaster_id: broadcaster_id}) do
-    MyFinch.request("GET","https://api.twitch.tv/helix/chat/emotes?broadcaster_id=#{broadcaster_id}",
-    TwitchApi.ApiJson.Template.Method.Headers.config_headers(), nil)
-  end
+  # An ID that identifies the broadcaster to get the emotes from.
+  @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
 
+  @spec call(broadcaster_id) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
+  def call(%{broadcaster_id: broadcaster_id}) do
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/chat/emotes?broadcaster_id=#{broadcaster_id}",
+      Headers.config_headers(),
+      nil
+    )
+  end
 end

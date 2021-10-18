@@ -5,39 +5,77 @@ defmodule TwitchApi.Polls.GetPolls do
   ## Example request from twitch api docs:
   ### descriptions:
   Returns information for a specific poll created for the TwitchDev channel.
-  
+
   ### requests:
   curl -X GET 'https://api.twitch.tv/helix/polls?broadcaster_id=141981764&id=ed961efd-8a3f-4cf5-a9d0-e616c590cd2a'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
    -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   {"data":[{"id":"ed961efd-8a3f-4cf5-a9d0-e616c590cd2a","broadcaster_id":"55696719","broadcaster_name":"TwitchDev","broadcaster_login":"twitchdev","title":"Heads or Tails?","choices":[{"id":"4c123012-1351-4f33-84b7-43856e7a0f47","title":"Heads","votes":0,"channel_points_votes":0,"bits_votes":0},{"id":"279087e3-54a7-467e-bcd0-c1393fcea4f0","title":"Tails","votes":0,"channel_points_votes":0,"bits_votes":0}],"bits_voting_enabled":false,"bits_per_vote":0,"channel_points_voting_enabled":false,"channel_points_per_vote":0,"status":"ACTIVE","duration":1800,"started_at":"2021-03-19T06:08:33.871278372Z"}],"pagination":{}}
-  
+
 
   """
 
   alias TwitchApi.MyFinch
-
+  alias TwitchApi.ApiJson.Template.Method.Headers
 
   @doc """
   ### Description:
   NEW Get information about all polls or specific polls for a Twitch channel. Poll information is available for 90 days.
 
   ### Required authentication:
-  
+
   """
 
-  @typep broadcaster_id :: %{required(:broadcaster_id) => String.t()} # The broadcaster running polls. Provided broadcaster_id must match the user_id in the user OAuth token.Maximum: 1
-  
-  @spec call(broadcaster_id) :: {:ok, Finch.Response.t} | {:error, Exception.t}
+  # The broadcaster running polls. Provided broadcaster_id must match the user_id in the user OAuth token.Maximum: 1
+  @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
+  # ID of a poll. Filters results to one or more specific polls. Not providing one or more IDs will return the full list of polls for the authenticated channel.Maximum: 100
+  @type id :: %{required(:id) => String.t()}
+  # Cursor for forward pagination: tells the server where to start fetching the next set of results in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+  @type after_query_param :: %{required(:after_query_param) => String.t()}
+  # Maximum number of objects to return.Maximum: 20. Default: 20.
+  @type first :: %{required(:first) => String.t()}
+
+  @spec call(broadcaster_id | id | after_query_param | first) ::
+          {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{broadcaster_id: broadcaster_id}) do
-    MyFinch.request("GET","https://api.twitch.tv/helix/polls?broadcaster_id=#{broadcaster_id}",
-    TwitchApi.ApiJson.Template.Method.Headers.config_headers(), nil)
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/polls?broadcaster_id=#{broadcaster_id}",
+      Headers.config_headers(),
+      nil
+    )
   end
 
+  def call(%{id: id}) do
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/polls?id=#{id}",
+      Headers.config_headers(),
+      nil
+    )
+  end
+
+  def call(%{after: after_query_param}) do
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/polls?after=#{after_query_param}",
+      Headers.config_headers(),
+      nil
+    )
+  end
+
+  def call(%{first: first}) do
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/polls?first=#{first}",
+      Headers.config_headers(),
+      nil
+    )
+  end
 end

@@ -11,7 +11,8 @@ defmodule TwitchApi.ApiJson.Template.Method.Args do
   """
   @spec query_params(Item.t()) :: [Query.parsed_params()]
   def query_params(item) do
-    Query.parse_query_params(item.request.query_params)
+    query_params = item.request.query_params ++ item.request.optional_query_params
+    Query.parse_query_params(query_params)
   end
 
   @doc """
@@ -33,7 +34,7 @@ defmodule TwitchApi.ApiJson.Template.Method.Args do
   @doc """
   Provides the twitch api Elixir authentication for a twitch api item
   """
-  @spec authentication(Item.t()) :: boolean
+  @spec authentication(Item.t()) :: boolean | :not_supported
   def authentication(item) do
     Authentication.parse_authentication(item.request.authentication)
   end

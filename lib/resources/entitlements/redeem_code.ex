@@ -4,24 +4,24 @@ defmodule TwitchApi.Entitlements.RedeemCode do
 
   ## Example request from twitch api docs:
   ### descriptions:
-  
+
   ### requests:
   curl -X POST 'https://api.twitch.tv/helix/entitlements/codes?code=8CD5P-V3J92-2S6JY&code=PUN4G-HYFVP-MMFET'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
    -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   {"data":[{"code":"8CD5P-V3J92-2S6JY","status":"SUCCESSFULLY_REDEEMED"},{"code":"PUN4G-HYFVP-MMFET","status":"ALREADY_CLAIMED"}]}
-  
+
 
   """
 
   alias TwitchApi.MyFinch
-
+  alias TwitchApi.ApiJson.Template.Method.Headers
 
   @doc """
   ### Description:
@@ -31,10 +31,13 @@ defmodule TwitchApi.Entitlements.RedeemCode do
   Access is controlled via an app access token on the calling service. The client ID associated with the app access token must be approved by Twitch.
   """
 
-  @spec call() :: {:ok, Finch.Response.t} | {:error, Exception.t}
-  def call() do
-    MyFinch.request("POST","https://api.twitch.tv/helix/entitlements/codes",
-    TwitchApi.ApiJson.Template.Method.Headers.config_headers(), nil)
+  @spec call() :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
+  def call do
+    MyFinch.request(
+      "POST",
+      "https://api.twitch.tv/helix/entitlements/codes",
+      Headers.config_headers(),
+      nil
+    )
   end
-
 end
