@@ -17,12 +17,16 @@ defmodule TwitchApi.ApiJson.Template.Method.Headers do
   end
 
   defp valid_item?(item) do
-    case Args.authentication(item) do
-      false -> Args.authentication(item) or Args.authorization(item)
-      :not_supported -> :not_supported
-      true -> Args.authentication(item) or Args.authorization(item)
-    end
+    authentication = Args.authentication(item)
+    authorization = Args.authorization(item)
+    valid_header?(authentication, authorization)
   end
+
+  defp valid_header?(true, _), do: true
+  defp valid_header?(_, true), do: true
+  defp valid_header?(:not_supported, _), do: :not_supported
+  defp valid_header?(_, :not_supported), do: :not_supported
+  defp valid_header?(_, _), do: false
 
   defp parse_headers(:not_supported), do: :not_supported
   defp parse_headers(true), do: ",\n    Headers.config_headers()"

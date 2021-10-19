@@ -19,7 +19,7 @@ defmodule TwitchApi.ApiJson.Template.Method.Args.Authentication do
   def parse_authentication(_), do: false
 
   defp is_valid?(true, _), do: true
-  defp is_valid?(false, true), do: :not_supported
+  defp is_valid?(_, true), do: :not_supported
   defp is_valid?(false, false), do: false
 
   defp has_app?(authentication) do

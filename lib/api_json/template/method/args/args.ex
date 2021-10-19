@@ -26,7 +26,7 @@ defmodule TwitchApi.ApiJson.Template.Method.Args do
   @doc """
   Provides the twitch api Elixir authorization for a twitch api item
   """
-  @spec authorization(Item.t()) :: boolean
+  @spec authorization(Item.t()) :: boolean | :not_supported
   def authorization(item) do
     Authorization.parse_authorization(item.request.authorization)
   end
