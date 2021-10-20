@@ -34,7 +34,7 @@ defmodule TwitchApi.MixProject do
   def application do
     [
       mod: {TwitchApi.Application, []},
-      extra_applications: [:logger, :iex]
+      extra_applications: [:logger, :iex, :cowboy, :plug]
     ]
   end
 
@@ -56,7 +56,10 @@ defmodule TwitchApi.MixProject do
     [
       {:jason, "~> 1.2.2"},
       {:ecto, "~> 3.7.0"},
-      {:finch, "~> 0.8"}
+      {:finch, "~> 0.8"},
+      {:cowboy, "~> 2.9.0"},
+      {:plug_cowboy, "~> 2.5.2"},
+      {:plug, "~> 1.12.1"}
     ] ++ dev_deps() ++ test_deps()
   end
 

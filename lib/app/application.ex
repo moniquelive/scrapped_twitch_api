@@ -5,10 +5,13 @@ defmodule TwitchApi.Application do
 
   use Application
 
+  alias Plug.Adapters.Cowboy
+
   def start(_type, _args) do
     children = [
       {Finch, name: MyFinch},
-      {TwitchApi.AppAccessToken, []}
+      {TwitchApi.AppAccessToken, []},
+      Cowboy.child_spec(scheme: :http, plug: SimpleServer.Router, options: [port: 8090])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
