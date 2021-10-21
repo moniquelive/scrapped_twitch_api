@@ -11,7 +11,8 @@ defmodule TwitchApi.Application do
     children = [
       {Finch, name: MyFinch},
       {TwitchApi.AppAccessToken, []},
-      Cowboy.child_spec(scheme: :http, plug: SimpleServer.Router, options: [port: 8090])
+      {TwitchApi.OIDC, []},
+      Cowboy.child_spec(scheme: :http, plug: TwitchApi.SimpleServer.Router, options: [port: 8090])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
