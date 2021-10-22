@@ -31,7 +31,7 @@ defmodule TwitchApi.OIDC do
   @impl true
   @spec format_status(any, list) :: list
   def format_status(_reason, [pdict, state]),
-    do: [pdict, state]
+    do: [pdict, Map.drop(state, @filter_sensitive_keys)]
 
   @doc """
   Callback for the GenServer to handle the browser message
@@ -100,7 +100,7 @@ defmodule TwitchApi.OIDC do
   end
 
   @spec browser_user_access_token(list) :: :ok
-  def browser_user_access_token(scopes), do: GenServer.cast(__MODULE__, {:browser, scopes})
+  def browser_user_access_token(scopes \\ []), do: GenServer.cast(__MODULE__, {:browser, scopes})
 
   @spec request_access_token(map) :: :ok
   def request_access_token(query_params),
