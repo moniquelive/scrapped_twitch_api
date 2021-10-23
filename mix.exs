@@ -60,7 +60,8 @@ defmodule TwitchApi.MixProject do
       {:cowboy, "~> 2.9.0"},
       {:plug_cowboy, "~> 2.5.2"},
       {:plug, "~> 1.12.1"},
-      {:uuid, "~> 1.1"}
+      {:uuid, "~> 1.1"},
+      {:jose, "~> 1.11.2"}
     ] ++ dev_deps() ++ test_deps()
   end
 
