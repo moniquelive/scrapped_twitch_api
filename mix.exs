@@ -56,7 +56,7 @@ defmodule TwitchApi.MixProject do
     [
       {:jason, "~> 1.2.2"},
       {:ecto, "~> 3.7.0"},
-      {:finch, "~> 0.8"},
+      {:finch, "~> 0.9"},
       {:cowboy, "~> 2.9.0"},
       {:plug_cowboy, "~> 2.5.2"},
       {:plug, "~> 1.12.1"},

@@ -23,7 +23,6 @@ defmodule TwitchApi.OIDC do
   @type users_data :: %{binary => user_data}
   @type state :: %__MODULE__{state: binary, users_id: users_data, users_name: users_data}
 
-  @callback_uri "http://localhost:8090/callback"
   @filter_state ~w(state)a
   @filter_users_data ~w(access_token refresh_token)a
 
@@ -65,10 +64,7 @@ defmodule TwitchApi.OIDC do
   @spec handle_cast({:browser, list}, state) :: {:noreply, state}
   def handle_cast({:browser, scope}, state) do
     Logger.info("Launch browser with twitch oidc authorization path")
-    oidc_state = generate_state()
-    path = generate_oidc_url(oidc_state, scope)
-    browser_open(path)
-    {:noreply, %__MODULE__{state | state: oidc_state}}
+    {:noreply, AccessToken.browse(scope, state)}
   end
 
   def handle_cast({:access_token, %{"code" => code}}, state) do
@@ -82,6 +78,15 @@ defmodule TwitchApi.OIDC do
   @impl true
   def handle_call(:state, _from, state) do
     {:reply, state, state}
+  end
+
+  @doc """
+  Callback for the GenServer to handle the refresh message
+  """
+  @impl true
+  def handle_info({:refresh, user_id, user_name, refresh_token, interval}, state) do
+    Logger.info("Sending refresh request for access token from user: #{user_name}")
+    {:noreply, AccessToken.refresh(user_id, user_name, refresh_token, interval, state)}
   end
 
   @doc """
@@ -136,48 +141,16 @@ defmodule TwitchApi.OIDC do
   def request_access_token(query_params),
     do: GenServer.cast(__MODULE__, {:access_token, query_params})
 
-  defp browser_open(path) do
-    start_browser_command =
-      case :os.type() do
-        {:win32, _} ->
-          "start"
+  @doc """
+  Function to send the message to refresh
+  """
+  def schedule_refresh(user_id, user_name, refresh_token, interval) do
+    Logger.debug("Scheduling a refresh for user: #{user_name} in #{interval} seconds")
 
-        {:unix, :darwin} ->
-          "open"
-
-        {:unix, _} ->
-          "xdg-open"
-      end
-
-    if System.find_executable(start_browser_command) do
-      System.cmd(start_browser_command, [path])
-    else
-      Mix.raise("Command not found: #{start_browser_command}")
-    end
+    Process.send_after(
+      self(),
+      {:refresh, user_id, user_name, refresh_token, interval},
+      interval * 1_000
+    )
   end
-
-  defp generate_oidc_url(state, []) do
-    wrapped_client_id = fn -> System.fetch_env!("client_id") end
-
-    "https://id.twitch.tv/oauth2/authorize"
-    |> Kernel.<>("?response_type=code")
-    |> Kernel.<>("&client_id=#{wrapped_client_id.()}")
-    |> Kernel.<>("&redirect_uri=#{@callback_uri}")
-    |> Kernel.<>("&scope=openid")
-    |> Kernel.<>("&state=#{state}")
-  end
-
-  defp generate_oidc_url(state, scope) do
-    wrapped_client_id = fn -> System.fetch_env!("client_id") end
-    scopes = Enum.join(scope, "+")
-
-    "https://id.twitch.tv/oauth2/authorize"
-    |> Kernel.<>("?response_type=code")
-    |> Kernel.<>("&client_id=#{wrapped_client_id.()}")
-    |> Kernel.<>("&redirect_uri=#{@callback_uri}")
-    |> Kernel.<>("&scope=#{scopes}+openid")
-    |> Kernel.<>("&state=#{state}")
-  end
-
-  defp generate_state, do: UUID.uuid1()
 end
