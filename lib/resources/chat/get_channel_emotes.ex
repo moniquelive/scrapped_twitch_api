@@ -34,6 +34,9 @@ defmodule TwitchApi.Chat.GetChannelEmotes do
 
   ### Required authentication:
 
+
+  ### Required authorization:
+  Requires a user or application OAuth access token.
   """
 
   # An ID that identifies the broadcaster to get the emotes from.

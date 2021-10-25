@@ -30,6 +30,9 @@ defmodule TwitchApi.Chat.GetGlobalChatBadges do
 
   ### Required authentication:
 
+
+  ### Required authorization:
+  User OAuth Token or App Access Token
   """
 
   @spec call() :: {:ok, Finch.Response.t()} | {:error, Exception.t()}

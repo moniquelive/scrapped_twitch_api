@@ -36,6 +36,9 @@ defmodule TwitchApi.Tags.GetAllStreamTags do
 
   ### Required authentication:
   Requires an application OAuth access token.
+
+  ### Required authorization:
+
   """
 
   # The cursor used to get the next page of results. The pagination object in the response contains the cursor’s value.The after and tag_id query parameters are mutually exclusive.

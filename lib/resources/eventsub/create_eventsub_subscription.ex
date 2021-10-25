@@ -35,6 +35,9 @@ defmodule TwitchApi.EventSub.CreateEventSubSubscription do
 
   ### Required authentication:
   Requires an application OAuth access token.
+
+  ### Required authorization:
+
   """
 
   # The parameter values that are specific to the specified subscription type.

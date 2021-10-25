@@ -30,6 +30,9 @@ defmodule TwitchApi.Schedule.GetChannelStreamSchedule do
 
   ### Required authentication:
 
+
+  ### Required authorization:
+  User OAuth Token or App Access Token
   """
 
   # User ID of the broadcaster who owns the channel streaming schedule.Maximum: 1

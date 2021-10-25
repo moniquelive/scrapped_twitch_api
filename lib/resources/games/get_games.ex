@@ -30,6 +30,9 @@ defmodule TwitchApi.Games.GetGames do
 
   ### Required authentication:
   OAuth or App Access Token required.
+
+  ### Required authorization:
+
   """
 
   # Game ID. At most 100 id values can be specified.

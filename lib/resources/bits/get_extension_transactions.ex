@@ -30,6 +30,9 @@ defmodule TwitchApi.Bits.GetExtensionTransactions do
 
   ### Required authentication:
   App Access Token
+
+  ### Required authorization:
+
   """
 
   # ID of the Extension to list transactions for.Maximum: 1

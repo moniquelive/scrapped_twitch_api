@@ -39,6 +39,10 @@ defmodule TwitchApi.Entitlements.UpdateDropsEntitlements do
 
   ### Required authentication:
   User OAuth Token or App Access Token
+
+  ### Required authorization:
+  The client ID associated with the access token must have ownership of the game:
+  Client ID > Organization ID > Game ID
   """
 
   # An array of unique identifiers of the entitlements to update.Maximum: 100.

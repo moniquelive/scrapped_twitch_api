@@ -33,6 +33,9 @@ defmodule TwitchApi.Subscriptions.GetBroadcasterSubscriptions do
   Subscriptions can be requested on behalf of a broadcaster with a user access token or by a Twitch Extension with an app access token if the broadcaster has granted the 
   channel:read:subscriptions
    scope from within the Twitch Extensions manager.
+
+  ### Required authorization:
+
   """
 
   # User ID of the broadcaster. Must match the User ID in the Bearer token.

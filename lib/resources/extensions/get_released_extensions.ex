@@ -29,6 +29,9 @@ defmodule TwitchApi.Extensions.GetReleasedExtensions do
 
   ### Required authentication:
 
+
+  ### Required authorization:
+  User OAuth Token or App Access Token
   """
 
   # ID of the Extension.

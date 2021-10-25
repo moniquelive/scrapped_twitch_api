@@ -34,6 +34,9 @@ defmodule TwitchApi.Bits.GetCheermotes do
 
   ### Required authentication:
   OAuth or App Access Token required.
+
+  ### Required authorization:
+
   """
 
   # ID for the broadcaster who might own specialized Cheermotes.

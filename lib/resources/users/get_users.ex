@@ -30,6 +30,9 @@ defmodule TwitchApi.Users.GetUsers do
 
   ### Required authentication:
   OAuth or App Access Token required.
+
+  ### Required authorization:
+  OAuth token with user:read:email scope required to include the user’s verified email address in response.
   """
 
   # User ID. Multiple user IDs can be specified. Limit: 100.

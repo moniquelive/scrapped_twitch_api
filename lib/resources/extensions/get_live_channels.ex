@@ -29,6 +29,9 @@ defmodule TwitchApi.Extensions.GetLiveChannels do
 
   ### Required authentication:
 
+
+  ### Required authorization:
+  User OAuth Token or App Access Token
   """
 
   # ID of the Extension to search for.

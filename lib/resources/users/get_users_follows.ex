@@ -30,6 +30,9 @@ defmodule TwitchApi.Users.GetUsersFollows do
 
   ### Required authentication:
   User OAuth Token or App Access Token
+
+  ### Required authorization:
+
   """
 
   @spec call() :: {:ok, Finch.Response.t()} | {:error, Exception.t()}

@@ -34,6 +34,9 @@ defmodule TwitchApi.Chat.GetEmoteSets do
 
   ### Required authentication:
 
+
+  ### Required authorization:
+  Requires a user or application OAuth access token.
   """
 
   # An ID that identifies the emote set. Include the parameter for each emote set you want to get. For example, emote_set_id=1234&emote_set_id=5678. You may specify a maximum of 25 IDs.

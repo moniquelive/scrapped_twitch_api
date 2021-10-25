@@ -10,6 +10,7 @@ defmodule TwitchApi.ApiJson.Template.Doc do
   @spec create_doc(Item.t()) :: binary
   def create_doc(item) do
     authentication = Enum.map_join(item.request.authentication, "\n  ", & &1)
+    authorization = Enum.map_join(item.request.authorization, "\n  ", & &1)
 
     """
     @doc \"\"\"
@@ -18,6 +19,9 @@ defmodule TwitchApi.ApiJson.Template.Doc do
 
       ### Required authentication:
       #{authentication}
+
+      ### Required authorization:
+      #{authorization}
       \"\"\"
     """
   end

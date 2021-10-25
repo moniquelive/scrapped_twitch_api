@@ -30,6 +30,9 @@ defmodule TwitchApi.Search.SearchCategories do
 
   ### Required authentication:
   OAuth or App Access Token required
+
+  ### Required authorization:
+
   """
 
   # URl encoded search query

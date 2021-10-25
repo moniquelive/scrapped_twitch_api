@@ -30,6 +30,9 @@ defmodule TwitchApi.Teams.GetTeams do
 
   ### Required authentication:
   User OAuth Token or App Access Token
+
+  ### Required authorization:
+
   """
 
   # Team name.

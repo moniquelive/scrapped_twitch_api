@@ -29,6 +29,9 @@ defmodule TwitchApi.Extensions.GetExtensionBitsProducts do
 
   ### Required authentication:
 
+
+  ### Required authorization:
+  App Access Token associated with the Extension client ID
   """
 
   # Whether Bits products that are disabled/expired should be included in the response.Default: false.

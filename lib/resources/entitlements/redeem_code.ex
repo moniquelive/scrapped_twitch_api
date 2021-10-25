@@ -29,6 +29,9 @@ defmodule TwitchApi.Entitlements.RedeemCode do
 
   ### Required authentication:
   Access is controlled via an app access token on the calling service. The client ID associated with the app access token must be approved by Twitch.
+
+  ### Required authorization:
+  Callers with an app access token are authorized to redeem codes on behalf of any Twitch user account.
   """
 
   @spec call() :: {:ok, Finch.Response.t()} | {:error, Exception.t()}

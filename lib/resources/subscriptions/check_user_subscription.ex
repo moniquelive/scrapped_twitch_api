@@ -34,6 +34,9 @@ defmodule TwitchApi.Subscriptions.CheckUserSubscription do
   ### Required authentication:
   User access token with scope user:read:subscriptions
   App access token if the user has authorized your application with scope user:read:subscriptions
+
+  ### Required authorization:
+
   """
 
   # User ID of an Affiliate or Partner broadcaster.

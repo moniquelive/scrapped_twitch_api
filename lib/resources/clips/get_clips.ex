@@ -35,6 +35,9 @@ defmodule TwitchApi.Clips.GetClips do
 
   ### Required authentication:
   OAuth or App Access Token required.
+
+  ### Required authorization:
+
   """
 
   # ID of the broadcaster for whom clips are returned. The number of clips returned is determined by the first query-string parameter (default: 20). Results are ordered by view count.

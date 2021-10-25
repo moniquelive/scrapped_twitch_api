@@ -34,6 +34,9 @@ defmodule TwitchApi.Goals.GetCreatorGoals do
 
   ### Required authentication:
 
+
+  ### Required authorization:
+  Requires a user OAuth access token with scope set to channel:read:goals. The ID in the broadcaster_id query parameter must match the user ID associated with the user OAuth token. In other words, only the broadcaster can see their goals.
   """
 
   # The ID of the broadcaster that created the goals.

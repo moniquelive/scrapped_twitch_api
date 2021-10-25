@@ -35,6 +35,9 @@ defmodule TwitchApi.EventSub.DeleteEventSubSubscription do
 
   ### Required authentication:
   Requires an application OAuth access token.
+
+  ### Required authorization:
+
   """
 
   # The ID of the subscription to delete. This is the ID that Create Eventsub Subscription returns.

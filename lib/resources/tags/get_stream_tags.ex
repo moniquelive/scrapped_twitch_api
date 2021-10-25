@@ -34,6 +34,9 @@ defmodule TwitchApi.Tags.GetStreamTags do
 
   ### Required authentication:
   Requires an application OAuth access token.
+
+  ### Required authorization:
+
   """
 
   # The user ID of the channel to get the tags from.

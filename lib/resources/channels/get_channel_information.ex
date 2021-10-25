@@ -30,6 +30,9 @@ defmodule TwitchApi.Channels.GetChannelInformation do
 
   ### Required authentication:
   Valid user token or app access token.
+
+  ### Required authorization:
+
   """
 
   # ID of the channel to be updated

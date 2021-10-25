@@ -36,6 +36,9 @@ defmodule TwitchApi.Extensions.UpdateExtensionBitsProduct do
 
   ### Required authentication:
 
+
+  ### Required authorization:
+  App Access Token associated with the Extension client ID
   """
 
   # Object containing cost information.

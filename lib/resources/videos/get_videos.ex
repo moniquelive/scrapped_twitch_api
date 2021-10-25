@@ -30,6 +30,9 @@ defmodule TwitchApi.Videos.GetVideos do
 
   ### Required authentication:
   User OAuth Token or App Access Token
+
+  ### Required authorization:
+
   """
 
   # ID of the video being queried. Limit: 100. If this is specified, you cannot use any of the optional query parameters below.

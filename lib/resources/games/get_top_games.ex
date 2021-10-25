@@ -30,6 +30,9 @@ defmodule TwitchApi.Games.GetTopGames do
 
   ### Required authentication:
   OAuth or App Access Token required.
+
+  ### Required authorization:
+
   """
 
   # Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.

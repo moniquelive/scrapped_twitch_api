@@ -34,6 +34,9 @@ defmodule TwitchApi.Chat.GetGlobalEmotes do
 
   ### Required authentication:
 
+
+  ### Required authorization:
+  Requires a user or application OAuth access token.
   """
 
   @spec call() :: {:ok, Finch.Response.t()} | {:error, Exception.t()}

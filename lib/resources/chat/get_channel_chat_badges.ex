@@ -30,6 +30,9 @@ defmodule TwitchApi.Chat.GetChannelChatBadges do
 
   ### Required authentication:
 
+
+  ### Required authorization:
+  User OAuth Token or App Access Token
   """
 
   # The broadcaster whose chat badges are being requested. Provided broadcaster_id must match the user_id in the user OAuth token.Maximum: 1

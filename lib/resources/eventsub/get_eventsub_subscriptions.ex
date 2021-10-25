@@ -34,6 +34,9 @@ defmodule TwitchApi.EventSub.GetEventSubSubscriptions do
 
   ### Required authentication:
   Requires an application OAuth access token.
+
+  ### Required authorization:
+
   """
 
   # Filter subscriptions by its status. You may specify only one status value. Valid values are: enabled — The subscription is enabled.webhook_callback_verification_pending — The subscription is pending verification of the specified callback URL.webhook_callback_verification_failed — The specified callback URL failed verification.notification_failures_exceeded — The notification delivery failure rate was too high.authorization_revoked — The authorization was revoked for one or more users specified in the Condition object.user_removed — One of the users specified in the Condition object was removed.
