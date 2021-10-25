@@ -33,7 +33,6 @@ defmodule TwitchApi.OIDC do
   @impl true
   def init(state) do
     Logger.info("Started user_access_token process")
-    Logger.info("#{inspect(self())}")
     {:ok, state}
   end
 
@@ -44,15 +43,19 @@ defmodule TwitchApi.OIDC do
   @spec format_status(any, list) :: list
   def format_status(_reason, [pdict, state]) do
     no_state = Map.drop(state, @filter_state)
-    %__MODULE__{users_id: users_id, users_name: users_name} = no_state
+    %__MODULE__{users_id: users_by_id, users_name: users_by_name} = no_state
 
-    filtered_users_id =
-      for {k, v} <- users_id, into: %{}, do: {k, Map.drop(v, @filter_users_data)}
+    filtered_users_by_id =
+      for {k, v} <- users_by_id, into: %{}, do: {k, Map.drop(v, @filter_users_data)}
 
-    filtered_users_name =
-      for {k, v} <- users_name, into: %{}, do: {k, Map.drop(v, @filter_users_data)}
+    filtered_users_by_name =
+      for {k, v} <- users_by_name, into: %{}, do: {k, Map.drop(v, @filter_users_data)}
 
-    filtered_state = %__MODULE__{users_id: filtered_users_id, users_name: filtered_users_name}
+    filtered_state = %__MODULE__{
+      users_id: filtered_users_by_id,
+      users_name: filtered_users_by_name
+    }
+
     [pdict, filtered_state]
   end
 
@@ -111,11 +114,24 @@ defmodule TwitchApi.OIDC do
   @doc """
   Returns the access token for the given user by user_id
   """
-  @spec get_access_token_id(binary) :: binary
+  @spec get_access_token_id(integer | binary) :: binary
+  def get_access_token_id(user_id) when is_integer(user_id) do
+    user_id_binary = Integer.to_string(user_id)
+    %__MODULE__{users_id: users_by_id} = GenServer.call(__MODULE__, :state)
+
+    case Map.get(users_by_id, user_id_binary) do
+      nil -> nil
+      %{access_token: access_token} -> access_token
+    end
+  end
+
   def get_access_token_id(user_id) do
-    %__MODULE__{users_id: users_id} = GenServer.call(__MODULE__, :state)
-    %{access_token: access_token} = Map.get(users_id, user_id)
-    access_token
+    %__MODULE__{users_id: users_by_id} = GenServer.call(__MODULE__, :state)
+
+    case Map.get(users_by_id, user_id) do
+      nil -> nil
+      %{access_token: access_token} -> access_token
+    end
   end
 
   @doc """
@@ -123,9 +139,12 @@ defmodule TwitchApi.OIDC do
   """
   @spec get_access_token_name(binary) :: binary
   def get_access_token_name(user_name) do
-    %__MODULE__{users_name: users_name} = GenServer.call(__MODULE__, :state)
-    %{access_token: access_token} = Map.get(users_name, user_name)
-    access_token
+    %__MODULE__{users_name: users_by_name} = GenServer.call(__MODULE__, :state)
+
+    case Map.get(users_by_name, user_name) do
+      nil -> nil
+      %{access_token: access_token} -> access_token
+    end
   end
 
   @doc """

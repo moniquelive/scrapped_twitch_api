@@ -12,7 +12,7 @@ defmodule TwitchApi.OIDC.AccessToken do
   @twitch_token_uri "https://id.twitch.tv/oauth2/token"
 
   @spec state(binary, TwitchApi.OIDC.state()) :: TwitchApi.OIDC.state()
-  def state(code, %TwitchApi.OIDC{users_id: users_id, users_name: users_name} = state) do
+  def state(code, %TwitchApi.OIDC{users_id: users_by_id, users_name: users_by_name} = state) do
     url = generate_authorize_url(code)
     {:ok, resp} = TwitchApi.MyFinch.request(:post, url, [], nil)
 
@@ -58,9 +58,9 @@ defmodule TwitchApi.OIDC.AccessToken do
 
     Logger.debug("Updating user data with user access token")
 
-    new_users_id = Map.put(users_id, user_id, user_data)
-    new_users_name = Map.put(users_name, preferred_username, user_data)
-    %{state | users_id: new_users_id, users_name: new_users_name}
+    new_users_by_id = Map.put(users_by_id, user_id, user_data)
+    new_users_by_name = Map.put(users_by_name, preferred_username, user_data)
+    %{state | users_id: new_users_by_id, users_name: new_users_by_name}
   end
 
   defp generate_authorize_url(code) do
@@ -134,7 +134,7 @@ defmodule TwitchApi.OIDC.AccessToken do
         user_name,
         refresh_token,
         interval,
-        %TwitchApi.OIDC{users_id: users_id, users_name: users_name} = state
+        %TwitchApi.OIDC{users_id: users_by_id, users_name: users_by_name} = state
       ) do
     headers = create_refresh_headers()
     url = generate_refresh_token_url(refresh_token)
@@ -146,9 +146,9 @@ defmodule TwitchApi.OIDC.AccessToken do
 
     OIDC.schedule_refresh(user_id, user_name, refresh_token, interval)
 
-    new_users_id = put_in(users_id, [user_id, :access_token], new_access_token)
-    new_users_name = put_in(users_name, [user_name, :access_token], new_access_token)
-    %{state | users_id: new_users_id, users_name: new_users_name}
+    new_users_by_id = put_in(users_by_id, [user_id, :access_token], new_access_token)
+    new_users_by_name = put_in(users_by_name, [user_name, :access_token], new_access_token)
+    %{state | users_id: new_users_by_id, users_name: new_users_by_name}
   end
 
   defp create_refresh_headers do
