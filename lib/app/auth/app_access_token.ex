@@ -100,7 +100,7 @@ defmodule TwitchApi.AppAccessToken do
   defp configure_twitch_token_url do
     wrapped_client_secret = fn -> System.fetch_env!("client_secret") end
     wrapped_client_id = fn -> System.fetch_env!("client_id") end
-    scopes = Application.get_env(:twitch_api, :scopes)
+    scopes = Application.get_env(:scrapped_twitch_api, :access_token_scopes)
 
     @twitch_token_url
     |> Kernel.<>("&client_id=#{wrapped_client_id.()}")

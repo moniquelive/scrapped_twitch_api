@@ -3,7 +3,7 @@ defmodule TwitchApi.MixProject do
 
   def project do
     [
-      app: :twitch_api,
+      app: :scrapped_twitch_api,
       version: "0.1.0",
       elixir: "~> 1.11",
       description: description(),
@@ -20,7 +20,7 @@ defmodule TwitchApi.MixProject do
       ],
       # Docs
       name: "TwitchApi",
-      source_url: "https://github.com/kamiyuzu/twitch_api",
+      source_url: "https://github.com/kamiyuzu/scrapped_twitch_api",
       docs: [
         main: TwitchApi,
         logo: "lib/assets/twitch_logo.svg.png",
@@ -46,7 +46,7 @@ defmodule TwitchApi.MixProject do
     [
       maintainers: ["Alberto Revuelta / Kamiyuzu"],
       licenses: ["GPL-3.0-or-later"],
-      links: %{"GitHub" => "https://github.com/kamiyuzu/twitch_api"},
+      links: %{"GitHub" => "https://github.com/kamiyuzu/scrapped_twitch_api"},
       files: ~w(lib mix.exs README* LICENSE)
     ]
   end
@@ -111,6 +111,17 @@ defmodule TwitchApi.MixProject do
       ],
       "Twitch api adapter": [
         TwitchApi.MyFinch
+      ],
+      "Twitch api app access token": [
+        TwitchApi.AppAccessToken
+      ],
+      "Twitch api oauth access token": [
+        TwitchApi.OIDC.AccessToken,
+        TwitchApi.OIDC
+      ],
+      "Twitch api simple server": [
+        TwitchApi.SimpleServer.Router,
+        TwitchApi.SimpleServer.Callback
       ],
       "Twitch api json item": [
         TwitchApi.ApiJson.Item
