@@ -30,7 +30,9 @@ defmodule TwitchApi.ApiJson.Template.Method.Args.Params.Query do
   end
 
   defp parse_param_type("string"), do: "String.t()"
+  defp parse_param_type("String"), do: "String.t()"
   defp parse_param_type("integer"), do: "integer"
+  defp parse_param_type("Integer"), do: "integer"
   defp parse_param_type("Boolean"), do: "boolean"
   defp parse_param_type("boolean"), do: "boolean"
   defp parse_param_type("array"), do: "list"

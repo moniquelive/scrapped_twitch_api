@@ -34,11 +34,25 @@ defmodule TwitchApi.Entitlements.GetCodeStatus do
   Callers with an app access token are authorized to redeem codes on behalf of any Twitch user account.
   """
 
-  @spec call() :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
-  def call do
+  # The code to get the status of. Repeat this query parameter additional times to get the status of multiple codes.Ex: ?code=code1&code=code21-20 code parameters are allowed.
+  @type code :: %{required(:code) => String.t()}
+  # Represents a numeric Twitch user ID.The user account which is going to receive the entitlement associated with the code.
+  @type user_id :: %{required(:user_id) => integer}
+
+  @spec call(code | user_id) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
+  def call(%{code: code}) do
     MyFinch.request(
       "GET",
-      "https://api.twitch.tv/helix/entitlements/codes",
+      "https://api.twitch.tv/helix/entitlements/codes?code=#{code}",
+      Headers.config_headers(),
+      nil
+    )
+  end
+
+  def call(%{user_id: user_id}) do
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/entitlements/codes?user_id=#{user_id}",
       Headers.config_headers(),
       nil
     )

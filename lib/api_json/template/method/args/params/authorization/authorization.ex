@@ -10,7 +10,7 @@ defmodule TwitchApi.ApiJson.Template.Method.Args.Authorization do
   @doc """
   Provides the twitch api Elixir authorization for a twitch api request authorization item
   """
-  @spec parse_authorization([String.t()]) :: boolean() | :not_supported
+  @spec parse_authorization([String.t()]) :: boolean() | :not_supported | :oauth
   def parse_authorization(authorization) when length(authorization) > 0 do
     app = has_app?(authorization)
     oauth = has_oauth?(authorization)
@@ -20,9 +20,9 @@ defmodule TwitchApi.ApiJson.Template.Method.Args.Authorization do
 
   def parse_authorization(_), do: false
 
-  defp is_valid?(true, _, _), do: true
-  defp is_valid?(_, true, _), do: :not_supported
   defp is_valid?(_, _, true), do: :not_supported
+  defp is_valid?(true, _, _), do: true
+  defp is_valid?(_, true, _), do: :oauth
   defp is_valid?(_, _, _), do: false
 
   defp has_app?(authorization) do

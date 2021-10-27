@@ -26,10 +26,13 @@ defmodule TwitchApi.ApiJson.Template.Method do
   end
 
   defp create_normal_method(http_method, url, headers, {specs, method_params, request_params}) do
-    parsed_method_params = Headers.parse_method_params(method_params)
+    {headers_type_specs, header_param_spec} = Headers.get_oauth_type_spec(headers)
+    parsed_method_params = Headers.parse_method_params(method_params, header_param_spec)
+    parsed_method_specs = Headers.parse_method_specs(specs, header_param_spec)
 
     """
-    @spec call(#{specs}) :: {:ok, Finch.Response.t} | {:error, Exception.t}
+    #{headers_type_specs}
+      @spec call(#{parsed_method_specs}) :: {:ok, Finch.Response.t} | {:error, Exception.t}
       def call#{parsed_method_params} do
         MyFinch.request(\"#{http_method}\",\"#{url}\"#{headers}#{request_params})
       end
@@ -43,11 +46,13 @@ defmodule TwitchApi.ApiJson.Template.Method do
     {specs, method_param, _} = parsed_body_params
     parsed_body_specs = BodyParams.parse_body_specs(specs)
     methods_map = methods_map(query_params, http_method, url, headers, parsed_body_params)
+    {headers_type_specs, header_param_spec} = Headers.get_oauth_type_spec(headers)
 
     (query_types ++
        parsed_body_specs ++
+       headers_type_specs ++
        [
-         "@spec call(#{type_params}#{method_param}) :: {:ok, Finch.Response.t} | {:error, Exception.t}"
+         "@spec call(#{type_params}#{method_param}#{header_param_spec}) :: {:ok, Finch.Response.t} | {:error, Exception.t}"
        ])
     |> Enum.concat(methods_map)
     |> Enum.map_join("\n  ", & &1)
@@ -56,9 +61,10 @@ defmodule TwitchApi.ApiJson.Template.Method do
   defp methods_map(query_params, http_method, url, headers, {_, method_params, request_params}) do
     Enum.map(query_params, fn {query_param, _type, query_param_string} ->
       parsed_param = Query.parse_query_param_type(query_param.param)
+      parsed_headers = Headers.parse_get_headers(headers)
 
       """
-      def call(%#{query_param_string}#{method_params}) do
+      def call(%#{query_param_string}#{method_params}#{parsed_headers}) do
           MyFinch.request(\"#{http_method}\",\"#{url}?#{query_param.param}=\#{#{parsed_param}}\"#{headers}#{request_params})
         end
       """
