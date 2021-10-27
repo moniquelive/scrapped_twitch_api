@@ -93,7 +93,7 @@ defmodule TwitchApi.AppAccessToken do
     parsed_body = Jason.decode!(response.body)
     filtered_body = Map.drop(parsed_body, filter_keys)
     response_filtered = %Finch.Response{response | body: filtered_body}
-    Logger.info(response_filtered)
+    Logger.debug(response_filtered)
     parsed_body
   end
 

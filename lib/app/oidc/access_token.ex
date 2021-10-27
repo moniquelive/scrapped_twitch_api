@@ -11,8 +11,8 @@ defmodule TwitchApi.OIDC.AccessToken do
   @twitch_jwk_uri "https://id.twitch.tv/oauth2/keys"
   @twitch_token_uri "https://id.twitch.tv/oauth2/token"
 
-  @spec state(binary, TwitchApi.OIDC.state()) :: TwitchApi.OIDC.state()
-  def state(code, %TwitchApi.OIDC{users_id: users_by_id, users_name: users_by_name} = state) do
+  @spec request(binary, TwitchApi.OIDC.state()) :: TwitchApi.OIDC.state()
+  def request(code, %TwitchApi.OIDC{users_id: users_by_id, users_name: users_by_name} = state) do
     url = generate_authorize_url(code)
     {:ok, resp} = TwitchApi.MyFinch.request(:post, url, [], nil)
 
@@ -75,9 +75,11 @@ defmodule TwitchApi.OIDC.AccessToken do
     |> Kernel.<>("&code=#{code}")
   end
 
+  @spec browse(list, TwitchApi.OIDC.state()) :: TwitchApi.OIDC.state()
   def browse(scope, state) do
     oidc_state = generate_state()
     path = generate_oidc_url(oidc_state, scope)
+    Logger.debug("Ask for authorization of the user in URI: #{path}")
     browser_open(path)
     %OIDC{state | state: oidc_state}
   end

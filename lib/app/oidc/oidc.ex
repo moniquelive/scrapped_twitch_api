@@ -72,7 +72,7 @@ defmodule TwitchApi.OIDC do
 
   def handle_cast({:access_token, %{"code" => code}}, state) do
     Logger.info("Sending authorization request to twitch for access token")
-    {:noreply, AccessToken.state(code, state)}
+    {:noreply, AccessToken.request(code, state)}
   end
 
   @doc """
@@ -163,6 +163,7 @@ defmodule TwitchApi.OIDC do
   @doc """
   Function to send the message to refresh
   """
+  @spec schedule_refresh(binary, binary, binary, non_neg_integer) :: reference
   def schedule_refresh(user_id, user_name, refresh_token, interval) do
     Logger.debug("Scheduling a refresh for user: #{user_name} in #{interval} seconds")
 
