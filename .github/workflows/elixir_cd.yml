@@ -2,7 +2,7 @@ name: Elixir CD
 
 on:
   schedule:
-  - cron: "0 8 * * *"
+  - cron: "0 9 * * 1"
 
 jobs:
   build:
@@ -23,38 +23,46 @@ jobs:
         path: |
           deps
           _build
-        key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          ~/.cache/dialyzer/plts
+        key: ${{ runner.os }}-${{ github.ref }}-mix-${{ hashFiles('**/mix.lock') }}
         restore-keys: |
-          ${{ runner.os }}-mix-
+          ${{ runner.os }}-${{ github.ref }}-mix-
+          ${{ runner.os }}-main-mix-
     - name: Install dependencies
       run: mix deps.get
-    - name: Run mix format
-      run: mix format
+    - name: Unlock dependencies
+      run: mix deps.unlock --check-unused
+    - name: Compile dependencies
+      run: mix compile --warnings-as-errors
+    - name: Check format
+      run: mix format --dry-run --check-formatted || exit 1
+    - name: Check tests
+      run: mix test
+    - name: Check style guide
+      run: |
+        set +e
+        max_credo_score=0
+        mix credo -C custom --strict
+        score=$?
+        if [ $score -gt $max_credo_score ]; then
+          exit $score
+        fi
+        exit 0
+    - name: Create persistent lookup table
+      run: mix dialyzer --plt
+    - name: Ensure correct typings
+      run: mix dialyzer --halt-exit-status || exit 1
     - name: Run mix task
-      run: ./export.sh
-    - name: Push tests to coveralls
-      if: ${{ success() }}
-      run: mix coveralls.github
-      env:
-        MIX_ENV: test
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: mix update_api
     - name: Simple commit
       if: ${{ success() }}
       uses: zwaldowski/git-commit-action@v1
       with:
         working_directory: . # optional, default is .
         commit_message: Automatic commit by github periodic action # default is Automated commit
-        author_name: kamiyuzu # optional, default is GitHub Actions
-        author_email: alberto.re.arr@gmail.com # optional, default is actions@github.com
-    - name: Push to main
+    - name: Push changes
       if: ${{ success() }}
-      uses: mikeal/publish-to-github-action@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        BRANCH_NAME: 'main' #optional defaults to master
-    - name: Create release
-      if: ${{ success() }}
-      uses: "marvinpinto/action-automatic-releases@latest"
+      uses: ad-m/github-push-action@master
       with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        prerelease: false
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
