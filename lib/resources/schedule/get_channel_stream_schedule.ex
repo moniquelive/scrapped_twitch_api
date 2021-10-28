@@ -35,17 +35,34 @@ defmodule TwitchApi.Schedule.GetChannelStreamSchedule do
   User OAuth Token or App Access Token
   """
 
-  # User ID of the broadcaster who owns the channel streaming schedule.Maximum: 1
+  @typedoc """
+  User ID of the broadcaster who owns the channel streaming schedule.Maximum: 1
+  """
   @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
-  # The ID of the stream segment to return.Maximum: 100.
+
+  @typedoc """
+  The ID of the stream segment to return.Maximum: 100.
+  """
   @type id :: %{required(:id) => String.t()}
-  # A timestamp in RFC3339 format to start returning stream segments from. If not specified, the current date and time is used.
+
+  @typedoc """
+  A timestamp in RFC3339 format to start returning stream segments from. If not specified, the current date and time is used.
+  """
   @type start_time :: %{required(:start_time) => String.t()}
-  # A timezone offset for the requester specified in minutes. This is recommended to ensure stream segments are returned for the correct week. For example, a timezone that is +4 hours from GMT would be “240.” If not specified, “0” is used for GMT.
+
+  @typedoc """
+  A timezone offset for the requester specified in minutes. This is recommended to ensure stream segments are returned for the correct week. For example, a timezone that is +4 hours from GMT would be “240.” If not specified, “0” is used for GMT.
+  """
   @type utc_offset :: %{required(:utc_offset) => String.t()}
-  # Maximum number of stream segments to return.Maximum: 25. Default: 20.
+
+  @typedoc """
+  Maximum number of stream segments to return.Maximum: 25. Default: 20.
+  """
   @type first :: %{required(:first) => integer}
-  # Cursor for forward pagination: tells the server where to start fetching the next set of results in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+
+  @typedoc """
+  Cursor for forward pagination: tells the server where to start fetching the next set of results in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+  """
   @type after_query_param :: %{required(:after_query_param) => String.t()}
 
   @spec call(broadcaster_id | id | start_time | utc_offset | first | after_query_param) ::

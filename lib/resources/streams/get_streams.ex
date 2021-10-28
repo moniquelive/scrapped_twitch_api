@@ -49,19 +49,39 @@ defmodule TwitchApi.Streams.GetStreams do
 
   """
 
-  # Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+  @typedoc """
+  Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+  """
   @type after_query_param :: %{required(:after_query_param) => String.t()}
-  # Cursor for backward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+
+  @typedoc """
+  Cursor for backward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+  """
   @type before :: %{required(:before) => String.t()}
-  # Maximum number of objects to return. Maximum: 100. Default: 20.
+
+  @typedoc """
+  Maximum number of objects to return. Maximum: 100. Default: 20.
+  """
   @type first :: %{required(:first) => integer}
-  # Returns streams broadcasting a specified game ID. You can specify up to 100 IDs.
+
+  @typedoc """
+  Returns streams broadcasting a specified game ID. You can specify up to 100 IDs.
+  """
   @type game_id :: %{required(:game_id) => String.t()}
-  # Stream language. You can specify up to 100 languages. A language value must be either the ISO 639-1 two-letter code for a supported stream language or “other”.
+
+  @typedoc """
+  Stream language. You can specify up to 100 languages. A language value must be either the ISO 639-1 two-letter code for a supported stream language or “other”.
+  """
   @type language :: %{required(:language) => String.t()}
-  # Returns streams broadcast by one or more specified user IDs. You can specify up to 100 IDs.
+
+  @typedoc """
+  Returns streams broadcast by one or more specified user IDs. You can specify up to 100 IDs.
+  """
   @type user_id :: %{required(:user_id) => String.t()}
-  # Returns streams broadcast by one or more specified user login names. You can specify up to 100 names.
+
+  @typedoc """
+  Returns streams broadcast by one or more specified user login names. You can specify up to 100 names.
+  """
   @type user_login :: %{required(:user_login) => String.t()}
 
   @spec call(after_query_param | before | first | game_id | language | user_id | user_login) ::

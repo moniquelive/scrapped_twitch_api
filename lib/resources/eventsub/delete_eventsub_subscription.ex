@@ -40,7 +40,9 @@ defmodule TwitchApi.EventSub.DeleteEventSubSubscription do
 
   """
 
-  # The ID of the subscription to delete. This is the ID that Create Eventsub Subscription returns.
+  @typedoc """
+  The ID of the subscription to delete. This is the ID that Create Eventsub Subscription returns.
+  """
   @type id :: %{required(:id) => String.t()}
 
   @spec call(id) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}

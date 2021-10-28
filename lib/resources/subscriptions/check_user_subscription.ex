@@ -39,9 +39,14 @@ defmodule TwitchApi.Subscriptions.CheckUserSubscription do
 
   """
 
-  # User ID of an Affiliate or Partner broadcaster.
+  @typedoc """
+  User ID of an Affiliate or Partner broadcaster.
+  """
   @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
-  # User ID of a Twitch viewer.
+
+  @typedoc """
+  User ID of a Twitch viewer.
+  """
   @type user_id :: %{required(:user_id) => String.t()}
 
   @spec call(broadcaster_id | user_id) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}

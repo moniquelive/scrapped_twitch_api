@@ -46,7 +46,12 @@ defmodule TwitchApi.ApiJson.Template.Method.Args.Params.Query do
     Enum.map(query_params, fn {query_param, type, _} ->
       parsed_query_param = parse_query_param_type(query_param.param)
 
-      "@type #{parsed_query_param} :: %{required(:#{parsed_query_param}) => #{type}} \# #{query_param.description}"
+      """
+      @typedoc \"\"\"
+            #{query_param.description}
+            \"\"\"
+        @type #{parsed_query_param} :: %{required(:#{parsed_query_param}) => #{type}}
+      """
     end)
   end
 

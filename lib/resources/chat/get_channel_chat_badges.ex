@@ -35,7 +35,9 @@ defmodule TwitchApi.Chat.GetChannelChatBadges do
   User OAuth Token or App Access Token
   """
 
-  # The broadcaster whose chat badges are being requested. Provided broadcaster_id must match the user_id in the user OAuth token.Maximum: 1
+  @typedoc """
+  The broadcaster whose chat badges are being requested. Provided broadcaster_id must match the user_id in the user OAuth token.Maximum: 1
+  """
   @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
 
   @spec call(broadcaster_id) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}

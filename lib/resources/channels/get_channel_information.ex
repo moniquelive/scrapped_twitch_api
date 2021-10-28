@@ -35,7 +35,9 @@ defmodule TwitchApi.Channels.GetChannelInformation do
 
   """
 
-  # ID of the channel to be updated
+  @typedoc """
+  ID of the channel to be updated
+  """
   @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
 
   @spec call(broadcaster_id) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}

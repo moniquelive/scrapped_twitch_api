@@ -35,9 +35,14 @@ defmodule TwitchApi.Games.GetGames do
 
   """
 
-  # Game ID. At most 100 id values can be specified.
+  @typedoc """
+  Game ID. At most 100 id values can be specified.
+  """
   @type id :: %{required(:id) => String.t()}
-  # Game name. The name must be an exact match. For example, “Pokemon” will not return a list of Pokemon games; instead, query any specific Pokemon games in which you are interested. At most 100 name values can be specified.
+
+  @typedoc """
+  Game name. The name must be an exact match. For example, “Pokemon” will not return a list of Pokemon games; instead, query any specific Pokemon games in which you are interested. At most 100 name values can be specified.
+  """
   @type name :: %{required(:name) => String.t()}
 
   @spec call(id | name) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}

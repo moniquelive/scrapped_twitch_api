@@ -37,15 +37,29 @@ defmodule TwitchApi.Users.BlockUser do
 
   """
 
-  # User ID of the user to be blocked.
+  @typedoc """
+  User ID of the user to be blocked.
+  """
   @type target_user_id :: %{required(:target_user_id) => String.t()}
-  # Source context for blocking the user. Valid values: "chat", "whisper".
+
+  @typedoc """
+  Source context for blocking the user. Valid values: "chat", "whisper".
+  """
   @type source_context :: %{required(:source_context) => String.t()}
-  # Reason for blocking the user. Valid values: "spam", "harassment", or "other".
+
+  @typedoc """
+  Reason for blocking the user. Valid values: "spam", "harassment", or "other".
+  """
   @type reason :: %{required(:reason) => String.t()}
 
-  # Map containing the user needed information for the user OAuth access token fetch
+  @typedoc """
+  Map containing the user needed information for the fetch of the required user OAuth access token.
+  You will be able to choose from one way or the other for fetching previously OAuth access tokens.
+  :user_id field contains the user ID from twitch, e.g. 61425548 or "61425548"
+  :user_name field constains the user name from twitch, e.g. "hiimkamiyuzu"
+  """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
+
   @spec call(target_user_id | source_context | reason, user_info) ::
           {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{target_user_id: target_user_id}, user_info) do

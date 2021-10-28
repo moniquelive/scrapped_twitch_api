@@ -36,19 +36,39 @@ defmodule TwitchApi.Streams.GetStreamMarkers do
 
   """
 
-  # ID of the broadcaster from whose stream markers are returned.
+  @typedoc """
+  ID of the broadcaster from whose stream markers are returned.
+  """
   @type user_id :: %{required(:user_id) => String.t()}
-  # ID of the VOD/video whose stream markers are returned.
+
+  @typedoc """
+  ID of the VOD/video whose stream markers are returned.
+  """
   @type video_id :: %{required(:video_id) => String.t()}
-  # Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+
+  @typedoc """
+  Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+  """
   @type after_query_param :: %{required(:after_query_param) => String.t()}
-  # Cursor for backward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+
+  @typedoc """
+  Cursor for backward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+  """
   @type before :: %{required(:before) => String.t()}
-  # Number of values to be returned when getting videos by user or game ID. Limit: 100. Default: 20.
+
+  @typedoc """
+  Number of values to be returned when getting videos by user or game ID. Limit: 100. Default: 20.
+  """
   @type first :: %{required(:first) => String.t()}
 
-  # Map containing the user needed information for the user OAuth access token fetch
+  @typedoc """
+  Map containing the user needed information for the fetch of the required user OAuth access token.
+  You will be able to choose from one way or the other for fetching previously OAuth access tokens.
+  :user_id field contains the user ID from twitch, e.g. 61425548 or "61425548"
+  :user_name field constains the user name from twitch, e.g. "hiimkamiyuzu"
+  """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
+
   @spec call(user_id | video_id | after_query_param | before | first, user_info) ::
           {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{user_id: user_id}, user_info) do

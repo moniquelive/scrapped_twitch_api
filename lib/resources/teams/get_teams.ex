@@ -35,9 +35,14 @@ defmodule TwitchApi.Teams.GetTeams do
 
   """
 
-  # Team name.
+  @typedoc """
+  Team name.
+  """
   @type name :: %{required(:name) => String.t()}
-  # Team ID.
+
+  @typedoc """
+  Team ID.
+  """
   @type id :: %{required(:id) => String.t()}
 
   @spec call(name | id) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}

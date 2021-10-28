@@ -42,8 +42,11 @@ defmodule TwitchApi.Schedule.CreateChannelStreamScheduleSegment do
   User OAuth TokenRequired scope: channel:manage:schedule
   """
 
-  # User ID of the broadcaster who owns the channel streaming schedule. Provided broadcaster_id must match the user_id in the user OAuth token.Maximum: 1
+  @typedoc """
+  User ID of the broadcaster who owns the channel streaming schedule. Provided broadcaster_id must match the user_id in the user OAuth token.Maximum: 1
+  """
   @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
+
   # Indicates if the scheduled broadcast is recurring weekly.
   @typep body_params ::
            %{
@@ -54,8 +57,14 @@ defmodule TwitchApi.Schedule.CreateChannelStreamScheduleSegment do
              required(:timezone) => String.t()
            }
            | nil
-  # Map containing the user needed information for the user OAuth access token fetch
+  @typedoc """
+  Map containing the user needed information for the fetch of the required user OAuth access token.
+  You will be able to choose from one way or the other for fetching previously OAuth access tokens.
+  :user_id field contains the user ID from twitch, e.g. 61425548 or "61425548"
+  :user_name field constains the user name from twitch, e.g. "hiimkamiyuzu"
+  """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
+
   @spec call(broadcaster_id, body_params, user_info) ::
           {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{broadcaster_id: broadcaster_id}, body_params, user_info) do

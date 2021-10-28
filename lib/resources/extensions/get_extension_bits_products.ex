@@ -34,7 +34,9 @@ defmodule TwitchApi.Extensions.GetExtensionBitsProducts do
   App Access Token associated with the Extension client ID
   """
 
-  # Whether Bits products that are disabled/expired should be included in the response.Default: false.
+  @typedoc """
+  Whether Bits products that are disabled/expired should be included in the response.Default: false.
+  """
   @type should_include_all :: %{required(:should_include_all) => boolean}
 
   @spec call(should_include_all) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}

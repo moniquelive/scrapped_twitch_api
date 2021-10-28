@@ -35,25 +35,54 @@ defmodule TwitchApi.Videos.GetVideos do
 
   """
 
-  # ID of the video being queried. Limit: 100. If this is specified, you cannot use any of the optional query parameters below.
+  @typedoc """
+  ID of the video being queried. Limit: 100. If this is specified, you cannot use any of the optional query parameters below.
+  """
   @type id :: %{required(:id) => String.t()}
-  # ID of the user who owns the video. Limit 1.
+
+  @typedoc """
+  ID of the user who owns the video. Limit 1.
+  """
   @type user_id :: %{required(:user_id) => String.t()}
-  # ID of the game the video is of. Limit 1.
+
+  @typedoc """
+  ID of the game the video is of. Limit 1.
+  """
   @type game_id :: %{required(:game_id) => String.t()}
-  # Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+
+  @typedoc """
+  Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+  """
   @type after_query_param :: %{required(:after_query_param) => String.t()}
-  # Cursor for backward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+
+  @typedoc """
+  Cursor for backward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+  """
   @type before :: %{required(:before) => String.t()}
-  # Number of values to be returned when getting videos by user or game ID. Limit: 100. Default: 20.
+
+  @typedoc """
+  Number of values to be returned when getting videos by user or game ID. Limit: 100. Default: 20.
+  """
   @type first :: %{required(:first) => String.t()}
-  # Language of the video being queried. Limit: 1. A language value must be either the ISO 639-1 two-letter code for a supported stream language or “other”.
+
+  @typedoc """
+  Language of the video being queried. Limit: 1. A language value must be either the ISO 639-1 two-letter code for a supported stream language or “other”.
+  """
   @type language :: %{required(:language) => String.t()}
-  # Period during which the video was created. Valid values: "all", "day", "week", "month". Default: "all".
+
+  @typedoc """
+  Period during which the video was created. Valid values: "all", "day", "week", "month". Default: "all".
+  """
   @type period :: %{required(:period) => String.t()}
-  # Sort order of the videos. Valid values: "time", "trending", "views". Default: "time".
+
+  @typedoc """
+  Sort order of the videos. Valid values: "time", "trending", "views". Default: "time".
+  """
   @type sort :: %{required(:sort) => String.t()}
-  # Type of video. Valid values: "all", "upload", "archive", "highlight". Default: "all".
+
+  @typedoc """
+  Type of video. Valid values: "all", "upload", "archive", "highlight". Default: "all".
+  """
   @type type :: %{required(:type) => String.t()}
 
   @spec call(

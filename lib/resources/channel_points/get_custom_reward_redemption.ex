@@ -41,23 +41,49 @@ defmodule TwitchApi.ChannelPoints.GetCustomRewardRedemption do
 
   """
 
-  # Provided broadcaster_id must match the user_id in the user OAuth token.
+  @typedoc """
+  Provided broadcaster_id must match the user_id in the user OAuth token.
+  """
   @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
-  # When ID is not provided, this parameter returns paginated Custom Reward Redemption objects for redemptions of the Custom Reward with ID reward_id.
+
+  @typedoc """
+  When ID is not provided, this parameter returns paginated Custom Reward Redemption objects for redemptions of the Custom Reward with ID reward_id.
+  """
   @type reward_id :: %{required(:reward_id) => String.t()}
-  # When used, this param filters the results and only returns Custom Reward Redemption objects for the redemptions with matching ID. Maximum: 50
+
+  @typedoc """
+  When used, this param filters the results and only returns Custom Reward Redemption objects for the redemptions with matching ID. Maximum: 50
+  """
   @type id :: %{required(:id) => String.t()}
-  # When id is not provided, this param is required and filters the paginated Custom Reward Redemption objects for redemptions with the matching status. Can be one of UNFULFILLED, FULFILLED or CANCELED
+
+  @typedoc """
+  When id is not provided, this param is required and filters the paginated Custom Reward Redemption objects for redemptions with the matching status. Can be one of UNFULFILLED, FULFILLED or CANCELED
+  """
   @type status :: %{required(:status) => String.t()}
-  # Sort order of redemptions returned when getting the paginated Custom Reward Redemption objects for a reward. One of: OLDEST, NEWEST. Default: OLDEST.
+
+  @typedoc """
+  Sort order of redemptions returned when getting the paginated Custom Reward Redemption objects for a reward. One of: OLDEST, NEWEST. Default: OLDEST.
+  """
   @type sort :: %{required(:sort) => String.t()}
-  # Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. This applies only to queries without ID. If an ID is specified, it supersedes any cursor/offset combinations. The cursor value specified here is from the pagination response field of a prior query.
+
+  @typedoc """
+  Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. This applies only to queries without ID. If an ID is specified, it supersedes any cursor/offset combinations. The cursor value specified here is from the pagination response field of a prior query.
+  """
   @type after_query_param :: %{required(:after_query_param) => String.t()}
-  # Number of results to be returned when getting the paginated Custom Reward Redemption objects for a reward. Limit: 50. Default: 20.
+
+  @typedoc """
+  Number of results to be returned when getting the paginated Custom Reward Redemption objects for a reward. Limit: 50. Default: 20.
+  """
   @type first :: %{required(:first) => integer}
 
-  # Map containing the user needed information for the user OAuth access token fetch
+  @typedoc """
+  Map containing the user needed information for the fetch of the required user OAuth access token.
+  You will be able to choose from one way or the other for fetching previously OAuth access tokens.
+  :user_id field contains the user ID from twitch, e.g. 61425548 or "61425548"
+  :user_name field constains the user name from twitch, e.g. "hiimkamiyuzu"
+  """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
+
   @spec call(
           broadcaster_id | reward_id | id | status | sort | after_query_param | first,
           user_info

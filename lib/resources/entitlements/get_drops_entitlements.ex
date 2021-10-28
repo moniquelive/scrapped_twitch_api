@@ -35,17 +35,34 @@ defmodule TwitchApi.Entitlements.GetDropsEntitlements do
   Client ID > Organization ID > Game ID
   """
 
-  # Unique identifier of the entitlement.
+  @typedoc """
+  Unique identifier of the entitlement.
+  """
   @type id :: %{required(:id) => String.t()}
-  # A Twitch user ID.
+
+  @typedoc """
+  A Twitch user ID.
+  """
   @type user_id :: %{required(:user_id) => String.t()}
-  # A Twitch game ID.
+
+  @typedoc """
+  A Twitch game ID.
+  """
   @type game_id :: %{required(:game_id) => String.t()}
-  # An optional fulfillment status used to filter entitlements. Valid values are "CLAIMED" or "FULFILLED".
+
+  @typedoc """
+  An optional fulfillment status used to filter entitlements. Valid values are "CLAIMED" or "FULFILLED".
+  """
   @type fulfillment_status :: %{required(:fulfillment_status) => String.t()}
-  # The cursor used to fetch the next page of data.
+
+  @typedoc """
+  The cursor used to fetch the next page of data.
+  """
   @type after_query_param :: %{required(:after_query_param) => String.t()}
-  # Maximum number of entitlements to return.Default: 20Max: 1000
+
+  @typedoc """
+  Maximum number of entitlements to return.Default: 20Max: 1000
+  """
   @type first :: %{required(:first) => integer}
 
   @spec call(id | user_id | game_id | fulfillment_status | after_query_param | first) ::

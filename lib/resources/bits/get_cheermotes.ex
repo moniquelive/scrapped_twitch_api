@@ -39,7 +39,9 @@ defmodule TwitchApi.Bits.GetCheermotes do
 
   """
 
-  # ID for the broadcaster who might own specialized Cheermotes.
+  @typedoc """
+  ID for the broadcaster who might own specialized Cheermotes.
+  """
   @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
 
   @spec call(broadcaster_id) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}

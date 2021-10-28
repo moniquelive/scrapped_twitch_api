@@ -48,13 +48,24 @@ defmodule TwitchApi.ChannelPoints.UpdateCustomReward do
 
   """
 
-  # Provided broadcaster_id must match the user_id in the user OAuth token.
+  @typedoc """
+  Provided broadcaster_id must match the user_id in the user OAuth token.
+  """
   @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
-  # ID of the Custom Reward to update. Must match a Custom Reward on the channel of the broadcaster_id.
+
+  @typedoc """
+  ID of the Custom Reward to update. Must match a Custom Reward on the channel of the broadcaster_id.
+  """
   @type id :: %{required(:id) => String.t()}
 
-  # Map containing the user needed information for the user OAuth access token fetch
+  @typedoc """
+  Map containing the user needed information for the fetch of the required user OAuth access token.
+  You will be able to choose from one way or the other for fetching previously OAuth access tokens.
+  :user_id field contains the user ID from twitch, e.g. 61425548 or "61425548"
+  :user_name field constains the user name from twitch, e.g. "hiimkamiyuzu"
+  """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
+
   @spec call(broadcaster_id | id, user_info) ::
           {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{broadcaster_id: broadcaster_id}, user_info) do

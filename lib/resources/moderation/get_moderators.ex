@@ -35,17 +35,34 @@ defmodule TwitchApi.Moderation.GetModerators do
   OAuth token requiredRequired scope: moderation:read
   """
 
-  # Provided broadcaster_id must match the user_id in the auth token. Maximum: 1
+  @typedoc """
+  Provided broadcaster_id must match the user_id in the auth token. Maximum: 1
+  """
   @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
-  # Filters the results and only returns a status object for users who are moderators in this channel and have a matching user_id.Format: Repeated Query Parameter, eg. /moderation/moderators?broadcaster_id=1&user_id=2&user_id=3Maximum: 100
+
+  @typedoc """
+  Filters the results and only returns a status object for users who are moderators in this channel and have a matching user_id.Format: Repeated Query Parameter, eg. /moderation/moderators?broadcaster_id=1&user_id=2&user_id=3Maximum: 100
+  """
   @type user_id :: %{required(:user_id) => String.t()}
-  # Maximum number of objects to return. Maximum: 100. Default: 20.
+
+  @typedoc """
+  Maximum number of objects to return. Maximum: 100. Default: 20.
+  """
   @type first :: %{required(:first) => String.t()}
-  # Cursor for forward pagination: tells the server where to start fetching the next set of results in a multi-page response. This applies only to queries without user_id. If a user_id is specified, it supersedes any cursor/offset combinations. The cursor value specified here is from the pagination response field of a prior query.
+
+  @typedoc """
+  Cursor for forward pagination: tells the server where to start fetching the next set of results in a multi-page response. This applies only to queries without user_id. If a user_id is specified, it supersedes any cursor/offset combinations. The cursor value specified here is from the pagination response field of a prior query.
+  """
   @type after_query_param :: %{required(:after_query_param) => String.t()}
 
-  # Map containing the user needed information for the user OAuth access token fetch
+  @typedoc """
+  Map containing the user needed information for the fetch of the required user OAuth access token.
+  You will be able to choose from one way or the other for fetching previously OAuth access tokens.
+  :user_id field contains the user ID from twitch, e.g. 61425548 or "61425548"
+  :user_name field constains the user name from twitch, e.g. "hiimkamiyuzu"
+  """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
+
   @spec call(broadcaster_id | user_id | first | after_query_param, user_info) ::
           {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{broadcaster_id: broadcaster_id}, user_info) do

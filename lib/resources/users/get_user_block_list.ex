@@ -37,15 +37,29 @@ defmodule TwitchApi.Users.GetUserBlockList do
 
   """
 
-  # User ID for a Twitch user.
+  @typedoc """
+  User ID for a Twitch user.
+  """
   @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
-  # Maximum number of objects to return. Maximum: 100. Default: 20.
+
+  @typedoc """
+  Maximum number of objects to return. Maximum: 100. Default: 20.
+  """
   @type first :: %{required(:first) => integer}
-  # Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+
+  @typedoc """
+  Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+  """
   @type after_query_param :: %{required(:after_query_param) => String.t()}
 
-  # Map containing the user needed information for the user OAuth access token fetch
+  @typedoc """
+  Map containing the user needed information for the fetch of the required user OAuth access token.
+  You will be able to choose from one way or the other for fetching previously OAuth access tokens.
+  :user_id field contains the user ID from twitch, e.g. 61425548 or "61425548"
+  :user_name field constains the user name from twitch, e.g. "hiimkamiyuzu"
+  """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
+
   @spec call(broadcaster_id | first | after_query_param, user_info) ::
           {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{broadcaster_id: broadcaster_id}, user_info) do

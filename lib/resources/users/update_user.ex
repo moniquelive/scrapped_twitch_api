@@ -36,11 +36,19 @@ defmodule TwitchApi.Users.UpdateUser do
 
   """
 
-  # User’s account description
+  @typedoc """
+  User’s account description
+  """
   @type description :: %{required(:description) => String.t()}
 
-  # Map containing the user needed information for the user OAuth access token fetch
+  @typedoc """
+  Map containing the user needed information for the fetch of the required user OAuth access token.
+  You will be able to choose from one way or the other for fetching previously OAuth access tokens.
+  :user_id field contains the user ID from twitch, e.g. 61425548 or "61425548"
+  :user_name field constains the user name from twitch, e.g. "hiimkamiyuzu"
+  """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
+
   @spec call(description, user_info) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{description: description}, user_info) do
     MyFinch.request(

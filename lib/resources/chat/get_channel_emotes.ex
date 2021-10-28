@@ -39,7 +39,9 @@ defmodule TwitchApi.Chat.GetChannelEmotes do
   Requires a user or application OAuth access token.
   """
 
-  # An ID that identifies the broadcaster to get the emotes from.
+  @typedoc """
+  An ID that identifies the broadcaster to get the emotes from.
+  """
   @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
 
   @spec call(broadcaster_id) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}

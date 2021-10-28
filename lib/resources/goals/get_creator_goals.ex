@@ -39,7 +39,9 @@ defmodule TwitchApi.Goals.GetCreatorGoals do
   Requires a user OAuth access token with scope set to channel:read:goals. The ID in the broadcaster_id query parameter must match the user ID associated with the user OAuth token. In other words, only the broadcaster can see their goals.
   """
 
-  # The ID of the broadcaster that created the goals.
+  @typedoc """
+  The ID of the broadcaster that created the goals.
+  """
   @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
 
   @spec call(broadcaster_id) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}

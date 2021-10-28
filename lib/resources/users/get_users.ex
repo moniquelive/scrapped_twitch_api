@@ -35,9 +35,14 @@ defmodule TwitchApi.Users.GetUsers do
   OAuth token with user:read:email scope required to include the user’s verified email address in response.
   """
 
-  # User ID. Multiple user IDs can be specified. Limit: 100.
+  @typedoc """
+  User ID. Multiple user IDs can be specified. Limit: 100.
+  """
   @type id :: %{required(:id) => String.t()}
-  # User login name. Multiple login names can be specified. Limit: 100.
+
+  @typedoc """
+  User login name. Multiple login names can be specified. Limit: 100.
+  """
   @type login :: %{required(:login) => String.t()}
 
   @spec call(id | login) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}

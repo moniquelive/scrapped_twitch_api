@@ -45,9 +45,14 @@ defmodule TwitchApi.Entitlements.UpdateDropsEntitlements do
   Client ID > Organization ID > Game ID
   """
 
-  # An array of unique identifiers of the entitlements to update.Maximum: 100.
+  @typedoc """
+  An array of unique identifiers of the entitlements to update.Maximum: 100.
+  """
   @type entitlement_ids :: %{required(:entitlement_ids) => list}
-  # A fulfillment status. Valid values are "CLAIMED" or "FULFILLED".
+
+  @typedoc """
+  A fulfillment status. Valid values are "CLAIMED" or "FULFILLED".
+  """
   @type fulfillment_status :: %{required(:fulfillment_status) => String.t()}
 
   @spec call(entitlement_ids | fulfillment_status) ::

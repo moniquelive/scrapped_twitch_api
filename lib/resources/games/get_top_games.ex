@@ -35,11 +35,19 @@ defmodule TwitchApi.Games.GetTopGames do
 
   """
 
-  # Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+  @typedoc """
+  Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+  """
   @type after_query_param :: %{required(:after_query_param) => String.t()}
-  # Cursor for backward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+
+  @typedoc """
+  Cursor for backward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+  """
   @type before :: %{required(:before) => String.t()}
-  # Maximum number of objects to return. Maximum: 100. Default: 20.
+
+  @typedoc """
+  Maximum number of objects to return. Maximum: 100. Default: 20.
+  """
   @type first :: %{required(:first) => integer}
 
   @spec call(after_query_param | before | first) ::

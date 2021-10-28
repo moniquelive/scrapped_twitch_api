@@ -41,21 +41,44 @@ defmodule TwitchApi.Analytics.GetGameAnalytics do
 
   """
 
-  # Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. This applies only to queries without game_id. If a game_id is specified, it supersedes any cursor/offset combinations. The cursor value specified here is from the pagination response field of a prior query.
+  @typedoc """
+  Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. This applies only to queries without game_id. If a game_id is specified, it supersedes any cursor/offset combinations. The cursor value specified here is from the pagination response field of a prior query.
+  """
   @type after_query_param :: %{required(:after_query_param) => String.t()}
-  # Ending date/time for returned reports, in RFC3339 format with the hours, minutes, and seconds zeroed out and the UTC timezone: YYYY-MM-DDT00:00:00Z. The report covers the entire ending date; e.g., if 2018-05-01T00:00:00Z is specified, the report covers up to 2018-05-01T23:59:59Z.If this is provided, started_at also must be specified. If ended_at is later than the default end date, the default date is used. Default: 1-2 days before the request was issued (depending on report availability).
+
+  @typedoc """
+  Ending date/time for returned reports, in RFC3339 format with the hours, minutes, and seconds zeroed out and the UTC timezone: YYYY-MM-DDT00:00:00Z. The report covers the entire ending date; e.g., if 2018-05-01T00:00:00Z is specified, the report covers up to 2018-05-01T23:59:59Z.If this is provided, started_at also must be specified. If ended_at is later than the default end date, the default date is used. Default: 1-2 days before the request was issued (depending on report availability).
+  """
   @type ended_at :: %{required(:ended_at) => String.t()}
-  # Maximum number of objects to return. Maximum: 100. Default: 20.
+
+  @typedoc """
+  Maximum number of objects to return. Maximum: 100. Default: 20.
+  """
   @type first :: %{required(:first) => integer}
-  # Game ID. If this is specified, the returned URL points to an analytics report for just the specified game. If this is not specified, the response includes multiple URLs (paginated), pointing to separate analytics reports for each of the authenticated user’s games.
+
+  @typedoc """
+  Game ID. If this is specified, the returned URL points to an analytics report for just the specified game. If this is not specified, the response includes multiple URLs (paginated), pointing to separate analytics reports for each of the authenticated user’s games.
+  """
   @type game_id :: %{required(:game_id) => String.t()}
-  # Starting date/time for returned reports, in RFC3339 format with the hours, minutes, and seconds zeroed out and the UTC timezone: YYYY-MM-DDT00:00:00Z.If this is provided, ended_at also must be specified. If started_at is earlier than the default start date, the default date is used. Default: 365 days before the report was issued. The file contains one row of data per day.
+
+  @typedoc """
+  Starting date/time for returned reports, in RFC3339 format with the hours, minutes, and seconds zeroed out and the UTC timezone: YYYY-MM-DDT00:00:00Z.If this is provided, ended_at also must be specified. If started_at is earlier than the default start date, the default date is used. Default: 365 days before the report was issued. The file contains one row of data per day.
+  """
   @type started_at :: %{required(:started_at) => String.t()}
-  # Type of analytics report that is returned. Currently, this field has no affect on the response as there is only one report type. If additional types were added, using this field would return only the URL for the specified report. Limit: 1. Valid values: "overview_v2".
+
+  @typedoc """
+  Type of analytics report that is returned. Currently, this field has no affect on the response as there is only one report type. If additional types were added, using this field would return only the URL for the specified report. Limit: 1. Valid values: "overview_v2".
+  """
   @type type :: %{required(:type) => String.t()}
 
-  # Map containing the user needed information for the user OAuth access token fetch
+  @typedoc """
+  Map containing the user needed information for the fetch of the required user OAuth access token.
+  You will be able to choose from one way or the other for fetching previously OAuth access tokens.
+  :user_id field contains the user ID from twitch, e.g. 61425548 or "61425548"
+  :user_name field constains the user name from twitch, e.g. "hiimkamiyuzu"
+  """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
+
   @spec call(after_query_param | ended_at | first | game_id | started_at | type, user_info) ::
           {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{after: after_query_param}, user_info) do

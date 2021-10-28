@@ -34,9 +34,14 @@ defmodule TwitchApi.Entitlements.RedeemCode do
   Callers with an app access token are authorized to redeem codes on behalf of any Twitch user account.
   """
 
-  # The code to redeem to the authenticated user’s account.A fifteen character (plus optional hyphen separators) alphanumeric string, e.g. ABCDE-12345-FGHIJRepeat this query parameter additional times to redeem multiple codes.Ex: ?code=code1&code=code21-20 code parameters are allowed.
+  @typedoc """
+  The code to redeem to the authenticated user’s account.A fifteen character (plus optional hyphen separators) alphanumeric string, e.g. ABCDE-12345-FGHIJRepeat this query parameter additional times to redeem multiple codes.Ex: ?code=code1&code=code21-20 code parameters are allowed.
+  """
   @type code :: %{required(:code) => String.t()}
-  # Represents a numeric Twitch user ID.The user account which is going to receive the entitlement associated with the code.
+
+  @typedoc """
+  Represents a numeric Twitch user ID.The user account which is going to receive the entitlement associated with the code.
+  """
   @type user_id :: %{required(:user_id) => integer}
 
   @spec call(code | user_id) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}

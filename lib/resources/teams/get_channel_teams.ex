@@ -35,7 +35,9 @@ defmodule TwitchApi.Teams.GetChannelTeams do
 
   """
 
-  # User ID for a Twitch user.
+  @typedoc """
+  User ID for a Twitch user.
+  """
   @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
 
   @spec call(broadcaster_id) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}

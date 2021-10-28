@@ -34,9 +34,14 @@ defmodule TwitchApi.Extensions.GetReleasedExtensions do
   User OAuth Token or App Access Token
   """
 
-  # ID of the Extension.
+  @typedoc """
+  ID of the Extension.
+  """
   @type extension_id :: %{required(:extension_id) => String.t()}
-  # The specific version of the Extension to return. If not provided, the current version is returned.
+
+  @typedoc """
+  The specific version of the Extension to return. If not provided, the current version is returned.
+  """
   @type extension_version :: %{required(:extension_version) => String.t()}
 
   @spec call(extension_id | extension_version) ::

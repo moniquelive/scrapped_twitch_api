@@ -34,11 +34,19 @@ defmodule TwitchApi.Extensions.GetLiveChannels do
   User OAuth Token or App Access Token
   """
 
-  # ID of the Extension to search for.
+  @typedoc """
+  ID of the Extension to search for.
+  """
   @type extension_id :: %{required(:extension_id) => String.t()}
-  # Maximum number of objects to return.Maximum: 100. Default: 20.
+
+  @typedoc """
+  Maximum number of objects to return.Maximum: 100. Default: 20.
+  """
   @type first :: %{required(:first) => integer}
-  # The cursor used to fetch the next page of data.
+
+  @typedoc """
+  The cursor used to fetch the next page of data.
+  """
   @type after_query_param :: %{required(:after_query_param) => String.t()}
 
   @spec call(extension_id | first | after_query_param) ::

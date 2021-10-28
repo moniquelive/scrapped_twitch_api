@@ -36,17 +36,34 @@ defmodule TwitchApi.HypeTrain.GetHypeTrainEvents do
 
   """
 
-  # User ID of the broadcaster. Must match the User ID in the Bearer token if User Token is used.
+  @typedoc """
+  User ID of the broadcaster. Must match the User ID in the Bearer token if User Token is used.
+  """
   @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
-  # Maximum number of objects to return. Maximum: 100. Default: 1.
+
+  @typedoc """
+  Maximum number of objects to return. Maximum: 100. Default: 1.
+  """
   @type first :: %{required(:first) => integer}
-  # The id of the wanted event, if known
+
+  @typedoc """
+  The id of the wanted event, if known
+  """
   @type id :: %{required(:id) => String.t()}
-  # Cursor for forward pagination: tells the server where to start fetching the next set of results in a multi-page response. This applies only to queries without id. If an ID is specified, it supersedes any cursor/offset combinations. The cursor value specified here is from the pagination response field of a prior query.
+
+  @typedoc """
+  Cursor for forward pagination: tells the server where to start fetching the next set of results in a multi-page response. This applies only to queries without id. If an ID is specified, it supersedes any cursor/offset combinations. The cursor value specified here is from the pagination response field of a prior query.
+  """
   @type cursor :: %{required(:cursor) => String.t()}
 
-  # Map containing the user needed information for the user OAuth access token fetch
+  @typedoc """
+  Map containing the user needed information for the fetch of the required user OAuth access token.
+  You will be able to choose from one way or the other for fetching previously OAuth access tokens.
+  :user_id field contains the user ID from twitch, e.g. 61425548 or "61425548"
+  :user_name field constains the user name from twitch, e.g. "hiimkamiyuzu"
+  """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
+
   @spec call(broadcaster_id | first | id | cursor, user_info) ::
           {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{broadcaster_id: broadcaster_id}, user_info) do
