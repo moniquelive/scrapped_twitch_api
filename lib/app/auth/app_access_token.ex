@@ -43,11 +43,13 @@ defmodule TwitchApi.AppAccessToken do
   @impl true
   @spec handle_info(:fetch, state) :: {:noreply, state}
   def handle_info(:fetch, state) do
-    Logger.info("Started fetch state")
+    Logger.info("Started fetch state for App access token")
     {:ok, response} = MyFinch.request(:post, configure_twitch_token_url(), [], nil)
     new_state = update_app_access_token_state(state, response)
     %__MODULE__{expires_in: expires_in} = new_state
-    schedule_refresh(expires_in * 1_000 - 10_000)
+    refresh_seconds = expires_in * 1_000 - 10_000
+    schedule_refresh(refresh_seconds)
+    Logger.debug("Updating the App access token in: #{refresh_seconds} seconds")
     {:noreply, new_state}
   end
 
@@ -100,7 +102,11 @@ defmodule TwitchApi.AppAccessToken do
   defp configure_twitch_token_url do
     wrapped_client_secret = fn -> System.fetch_env!("client_secret") end
     wrapped_client_id = fn -> System.fetch_env!("client_id") end
-    scopes = Application.get_env(:scrapped_twitch_api, :access_token_scopes)
+
+    scopes =
+      :scrapped_twitch_api
+      |> Application.get_env(:access_token_scopes)
+      |> Enum.join("+")
 
     @twitch_token_url
     |> Kernel.<>("&client_id=#{wrapped_client_id.()}")

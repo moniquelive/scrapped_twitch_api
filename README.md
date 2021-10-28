@@ -11,9 +11,9 @@ This library provides an Elixir library for twitch API. It makes use of an Elixi
 
 ## Library configuration
 
-For making use of this library you will need to create a `.env` with the env vars from the `.env_example`. The env vars needed have to be fetched from [twitch developer documentation](https://dev.twitch.tv/docs/api).
+For making use of this library you will need to create a `.env` with the env vars from the [`.env_example`](.env_example). The env vars needed have to be fetched from [twitch developer documentation](https://dev.twitch.tv/docs/api).
 
-In the [.env](.env) file environment vars needs to be defined for usage. Those need to be loaded when working with this project. To do so, one can manually execute:
+In the [`.env`](.env) file environment vars needs to be defined for usage. Those need to be loaded when working with this project. To do so, one can manually execute:
 
 ```bash
 source .env
@@ -34,6 +34,15 @@ Continue with the instructions [here](https://github.com/direnv/direnv#setup)
 ## Library usage
 
 The library provides dynamically modules for fetching all Twitch API endpoints. The convention is: `TwitchApi.<TwitchCategory>.<Action><Endpoint>`. The convention might not be a rule since Twitch reference do not follow this rule always.
+
+We have two supported ways for dealing with Twitch API requests. In one hand we can deal through App access token requests. On the other hand we can go through OAuth access token requests.
+
+### App access token flow:
+
+For working with this flow you can change your application twitch scopes in the [`config/config.exs`](config/config.exs) file.
+To add the scopes you seems appropriate for your application just add them into the existing list of scopes.
+
+The scope added into the application is the default one twitch will ask for the basic actions. For more information about working with Twitch scopes please read further in: [scopes_documentation](https://dev.twitch.tv/docs/authentication/#scopes).
 
 This is an example running iex:
 
@@ -123,6 +132,42 @@ iex(5)> t TwitchApi.Users.GetUsers.login
 @type login() :: %{login: String.t()}
 
 User login name. Multiple login names can be specified. Limit: 100.
+```
+
+### OAuth access token flow:
+
+We will need to configure in our application [`config/config.exs`](config/config.exs) file the callback url registered in our [twitch_dev_console](https://dev.twitch.tv/console).
+
+For dealing with the OAuth flow we will have to specify in the `user_info` from the Twitch API requests needing OAuth. The user previously authenticated in our application ID or username is the only information needed.
+
+```elixir
+iex(1)> TwitchApi.OIDC.browser_user_access_token(["channel:read:stream_key"])
+:ok
+iex(2)> TwitchApi.Streams.GetStreamKey.call(%{broadcaster_id: "61425548"}, %{user_name: "hiimkamiyuzu"}) 
+{:ok,
+ %Finch.Response{
+   body: "{\"data\":[{\"stream_key\":\"live_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\"}]}",
+   headers: [
+     {"connection", "keep-alive"}, 
+     {"content-length", "72"},
+     {"content-type", "application/json; charset=utf-8"},
+     {"access-control-allow-origin", "*"},
+     {"ratelimit-limit", "800"},
+     {"ratelimit-remaining", "799"},
+     {"ratelimit-reset", "1635445341"},
+     {"timing-allow-origin", "https://www.twitch.tv"},
+     {"twitch-trace-id", "dfd9e95dd1ebf728feac2ee4b3f1cdab"},
+     {"x-ctxlog-logid", "1-617aea5c-2c76b5bc24bee60022f8e95b"},
+     {"date", "Thu, 28 Oct 2021 18:22:20 GMT"},
+     {"x-served-by", "cache-sea4427-SEA, cache-hel1410028-HEL"},
+     {"x-cache", "MISS, MISS"},
+     {"x-cache-hits", "0, 0"},
+     {"x-timer", "S1635445340.130363,VS0,VS0,VE237"},
+     {"vary", "Accept-Encoding"},
+     {"strict-transport-security", "max-age=300"}
+   ],
+   status: 200
+ }}
 ```
 
 ## Installation

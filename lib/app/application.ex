@@ -7,12 +7,18 @@ defmodule TwitchApi.Application do
 
   alias Plug.Adapters.Cowboy
 
+  @callback_port Application.compile_env!(:scrapped_twitch_api, :callback_port)
+
   def start(_type, _args) do
     children = [
       {Finch, name: MyFinch},
       {TwitchApi.AppAccessToken, []},
       {TwitchApi.OIDC, []},
-      Cowboy.child_spec(scheme: :http, plug: TwitchApi.SimpleServer.Router, options: [port: 8090])
+      Cowboy.child_spec(
+        scheme: :http,
+        plug: TwitchApi.SimpleServer.Router,
+        options: [port: @callback_port]
+      )
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

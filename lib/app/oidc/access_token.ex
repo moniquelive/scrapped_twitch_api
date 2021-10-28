@@ -6,8 +6,8 @@ defmodule TwitchApi.OIDC.AccessToken do
   require Logger
 
   alias TwitchApi.OIDC
+  alias TwitchApi.SimpleServer.Callback
 
-  @callback_uri "http://localhost:8090/callback"
   @twitch_jwk_uri "https://id.twitch.tv/oauth2/keys"
   @twitch_token_uri "https://id.twitch.tv/oauth2/token"
 
@@ -66,12 +66,13 @@ defmodule TwitchApi.OIDC.AccessToken do
   defp generate_authorize_url(code) do
     wrapped_client_id = fn -> System.fetch_env!("client_id") end
     wrapped_client_secret = fn -> System.fetch_env!("client_secret") end
+    callback_uri = Callback.callback_uri()
 
     @twitch_token_uri
     |> Kernel.<>("?grant_type=authorization_code")
     |> Kernel.<>("&client_id=#{wrapped_client_id.()}")
     |> Kernel.<>("&client_secret=#{wrapped_client_secret.()}")
-    |> Kernel.<>("&redirect_uri=#{@callback_uri}")
+    |> Kernel.<>("&redirect_uri=#{callback_uri}")
     |> Kernel.<>("&code=#{code}")
   end
 
@@ -104,25 +105,28 @@ defmodule TwitchApi.OIDC.AccessToken do
     end
   end
 
-  defp generate_oidc_url(state, []) do
+  @spec generate_oidc_url(binary, [scopes :: binary]) :: oauth_url :: binary
+  def generate_oidc_url(state, []) do
     wrapped_client_id = fn -> System.fetch_env!("client_id") end
+    callback_uri = Callback.callback_uri()
 
     "https://id.twitch.tv/oauth2/authorize"
     |> Kernel.<>("?response_type=code")
     |> Kernel.<>("&client_id=#{wrapped_client_id.()}")
-    |> Kernel.<>("&redirect_uri=#{@callback_uri}")
+    |> Kernel.<>("&redirect_uri=#{callback_uri}")
     |> Kernel.<>("&scope=openid")
     |> Kernel.<>("&state=#{state}")
   end
 
-  defp generate_oidc_url(state, scope) do
+  def generate_oidc_url(state, scope) do
     wrapped_client_id = fn -> System.fetch_env!("client_id") end
+    callback_uri = Callback.callback_uri()
     scopes = Enum.join(scope, "+")
 
     "https://id.twitch.tv/oauth2/authorize"
     |> Kernel.<>("?response_type=code")
     |> Kernel.<>("&client_id=#{wrapped_client_id.()}")
-    |> Kernel.<>("&redirect_uri=#{@callback_uri}")
+    |> Kernel.<>("&redirect_uri=#{callback_uri}")
     |> Kernel.<>("&scope=#{scopes}+openid")
     |> Kernel.<>("&state=#{state}")
   end
