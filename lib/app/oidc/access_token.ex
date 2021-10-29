@@ -76,63 +76,6 @@ defmodule TwitchApi.OIDC.AccessToken do
     |> Kernel.<>("&code=#{code}")
   end
 
-  @spec browse(list, TwitchApi.OIDC.state()) :: TwitchApi.OIDC.state()
-  def browse(scope, state) do
-    oidc_state = generate_state()
-    path = generate_oidc_url(oidc_state, scope)
-    Logger.debug("Ask for authorization of the user in URI: #{path}")
-    browser_open(path)
-    %OIDC{state | state: oidc_state}
-  end
-
-  defp browser_open(path) do
-    start_browser_command =
-      case :os.type() do
-        {:win32, _} ->
-          "start"
-
-        {:unix, :darwin} ->
-          "open"
-
-        {:unix, _} ->
-          "xdg-open"
-      end
-
-    if System.find_executable(start_browser_command) do
-      System.cmd(start_browser_command, [path])
-    else
-      Mix.raise("Command not found: #{start_browser_command}")
-    end
-  end
-
-  @spec generate_oidc_url(binary, [scopes :: binary]) :: oauth_url :: binary
-  def generate_oidc_url(state, []) do
-    wrapped_client_id = fn -> System.fetch_env!("client_id") end
-    callback_uri = Callback.callback_uri()
-
-    "https://id.twitch.tv/oauth2/authorize"
-    |> Kernel.<>("?response_type=code")
-    |> Kernel.<>("&client_id=#{wrapped_client_id.()}")
-    |> Kernel.<>("&redirect_uri=#{callback_uri}")
-    |> Kernel.<>("&scope=openid")
-    |> Kernel.<>("&state=#{state}")
-  end
-
-  def generate_oidc_url(state, scope) do
-    wrapped_client_id = fn -> System.fetch_env!("client_id") end
-    callback_uri = Callback.callback_uri()
-    scopes = Enum.join(scope, "+")
-
-    "https://id.twitch.tv/oauth2/authorize"
-    |> Kernel.<>("?response_type=code")
-    |> Kernel.<>("&client_id=#{wrapped_client_id.()}")
-    |> Kernel.<>("&redirect_uri=#{callback_uri}")
-    |> Kernel.<>("&scope=#{scopes}+openid")
-    |> Kernel.<>("&state=#{state}")
-  end
-
-  defp generate_state, do: UUID.uuid1()
-
   @spec refresh(binary, binary, binary, non_neg_integer, TwitchApi.OIDC.state()) ::
           TwitchApi.OIDC.state()
   def refresh(

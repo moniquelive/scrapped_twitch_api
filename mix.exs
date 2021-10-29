@@ -4,8 +4,8 @@ defmodule TwitchApi.MixProject do
   def project do
     [
       app: :scrapped_twitch_api,
-      version: "0.1.1",
-      elixir: "~> 1.11",
+      version: "0.1.2",
+      elixir: "~> 1.12",
       description: description(),
       package: package(),
       start_permanent: Mix.env() == :prod,
@@ -120,6 +120,7 @@ defmodule TwitchApi.MixProject do
         TwitchApi.OIDC
       ],
       "Twitch api simple server": [
+        TwitchApi.SimpleServer.Oauth,
         TwitchApi.SimpleServer.Router,
         TwitchApi.SimpleServer.Callback
       ],

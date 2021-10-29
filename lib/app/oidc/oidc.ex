@@ -21,7 +21,7 @@ defmodule TwitchApi.OIDC do
           time_issued: integer
         }
   @type users_data :: %{binary => user_data}
-  @type state :: %__MODULE__{state: binary, users_id: users_data, users_name: users_data}
+  @type state :: %__MODULE__{state: [binary], users_id: users_data, users_name: users_data}
 
   @filter_state ~w(state)a
   @filter_users_data ~w(access_token refresh_token)a
@@ -64,15 +64,19 @@ defmodule TwitchApi.OIDC do
   :access_token => Callback for the GenServer to handle the user access token
   """
   @impl true
-  @spec handle_cast({:browser, list}, state) :: {:noreply, state}
-  def handle_cast({:browser, scope}, state) do
-    Logger.info("Launch browser with twitch oidc authorization path")
-    {:noreply, AccessToken.browse(scope, state)}
-  end
-
   def handle_cast({:access_token, %{"code" => code}}, state) do
     Logger.info("Sending authorization request to twitch for access token")
     {:noreply, AccessToken.request(code, state)}
+  end
+
+  def handle_cast({:delete_state, state_to_delete}, %__MODULE__{state: states} = state) do
+    Logger.info("Deleting used state from authorized user")
+    {:noreply, %{state | state: List.delete(states, state_to_delete)}}
+  end
+
+  def handle_cast({:add_state, state_to_add}, %__MODULE__{state: states} = state) do
+    Logger.info("Adding state from unauthorized user")
+    {:noreply, %{state | state: [state_to_add | states]}}
   end
 
   @doc """
@@ -80,6 +84,7 @@ defmodule TwitchApi.OIDC do
   """
   @impl true
   def handle_call(:state, _from, state) do
+    Logger.debug("Fetching states list")
     {:reply, state, state}
   end
 
@@ -97,9 +102,8 @@ defmodule TwitchApi.OIDC do
   """
   @spec start_link(any) :: :ignore | {:error, term} | {:ok, pid}
   def start_link(_) do
-    GenServer.start_link(__MODULE__, %__MODULE__{state: "", users_id: %{}, users_name: %{}},
-      name: __MODULE__
-    )
+    start_state = %__MODULE__{state: [], users_id: %{}, users_name: %{}}
+    GenServer.start_link(__MODULE__, start_state, name: __MODULE__)
   end
 
   @doc """
@@ -110,6 +114,19 @@ defmodule TwitchApi.OIDC do
     %__MODULE__{state: state} = GenServer.call(__MODULE__, :state)
     state
   end
+
+  @doc """
+  Delete state the Genserver state list
+  """
+  @spec delete_from_state(binary) :: :ok
+  def delete_from_state(state_to_delete),
+    do: GenServer.cast(__MODULE__, {:delete_state, state_to_delete})
+
+  @doc """
+  Add state the Genserver state list
+  """
+  @spec add_to_state(binary) :: :ok
+  def add_to_state(state_to_add), do: GenServer.cast(__MODULE__, {:add_state, state_to_add})
 
   @doc """
   Returns the access token for the given user by user_id
@@ -146,12 +163,6 @@ defmodule TwitchApi.OIDC do
       %{access_token: access_token} -> access_token
     end
   end
-
-  @doc """
-  Launch the browser for making the twitch user authorize the Application
-  """
-  @spec browser_user_access_token(list) :: :ok
-  def browser_user_access_token(scopes \\ []), do: GenServer.cast(__MODULE__, {:browser, scopes})
 
   @doc """
   Request the access token for the previously authorized user
