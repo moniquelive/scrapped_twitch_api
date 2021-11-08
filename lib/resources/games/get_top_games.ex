@@ -5,24 +5,25 @@ defmodule TwitchApi.Games.GetTopGames do
   ## Example request from twitch api docs:
   ### descriptions:
   This gets the 20 currently most-viewed games.
-
+  
   ### requests:
   curl -X GET 'https://api.twitch.tv/helix/games/top'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
    -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'
-
+  
 
   ## Example response from twitch api docs:
   ### descriptions:
-
+  
   ### responses:
   {"data":[{"id":"493057","name":"PLAYERUNKNOWN'S BATTLEGROUNDS","box_art_url":"https://static-cdn.jtvnw.net/ttv-boxart/PLAYERUNKNOWN%27S%20BATTLEGROUNDS-{width}x{height}.jpg"},...],"pagination":{"cursor":"eyJiIjpudWxsLCJhIjp7Ik9mZnNldCI6MjB9fQ=="}}
-
+  
 
   """
 
   alias TwitchApi.MyFinch
   alias TwitchApi.ApiJson.Template.Method.Headers
+
 
   @doc """
   ### Description:
@@ -32,50 +33,39 @@ defmodule TwitchApi.Games.GetTopGames do
   OAuth or App Access Token required.
 
   ### Required authorization:
-
+  
   """
 
   @typedoc """
-  Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
-  """
+      Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+      """
   @type after_query_param :: %{required(:after_query_param) => String.t()}
 
   @typedoc """
-  Cursor for backward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
-  """
+      Cursor for backward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+      """
   @type before :: %{required(:before) => String.t()}
 
   @typedoc """
-  Maximum number of objects to return. Maximum: 100. Default: 20.
-  """
+      Maximum number of objects to return. Maximum: 100. Default: 20.
+      """
   @type first :: %{required(:first) => integer}
 
-  @spec call(after_query_param | before | first) ::
-          {:ok, Finch.Response.t()} | {:error, Exception.t()}
+  
+  @spec call(after_query_param | before | first) :: {:ok, Finch.Response.t} | {:error, Exception.t}
   def call(%{after: after_query_param}) do
-    MyFinch.request(
-      "GET",
-      "https://api.twitch.tv/helix/games/top?after=#{after_query_param}",
-      Headers.config_headers(),
-      nil
-    )
+    MyFinch.request("GET","https://api.twitch.tv/helix/games/top?after=#{after_query_param}",
+    Headers.config_headers(), nil)
   end
 
   def call(%{before: before}) do
-    MyFinch.request(
-      "GET",
-      "https://api.twitch.tv/helix/games/top?before=#{before}",
-      Headers.config_headers(),
-      nil
-    )
+    MyFinch.request("GET","https://api.twitch.tv/helix/games/top?before=#{before}",
+    Headers.config_headers(), nil)
   end
 
   def call(%{first: first}) do
-    MyFinch.request(
-      "GET",
-      "https://api.twitch.tv/helix/games/top?first=#{first}",
-      Headers.config_headers(),
-      nil
-    )
+    MyFinch.request("GET","https://api.twitch.tv/helix/games/top?first=#{first}",
+    Headers.config_headers(), nil)
   end
+
 end

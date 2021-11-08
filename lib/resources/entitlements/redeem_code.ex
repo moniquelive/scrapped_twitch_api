@@ -4,24 +4,25 @@ defmodule TwitchApi.Entitlements.RedeemCode do
 
   ## Example request from twitch api docs:
   ### descriptions:
-
+  
   ### requests:
   curl -X POST 'https://api.twitch.tv/helix/entitlements/codes?code=8CD5P-V3J92-2S6JY&code=PUN4G-HYFVP-MMFET'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
    -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'
-
+  
 
   ## Example response from twitch api docs:
   ### descriptions:
-
+  
   ### responses:
   {"data":[{"code":"8CD5P-V3J92-2S6JY","status":"SUCCESSFULLY_REDEEMED"},{"code":"PUN4G-HYFVP-MMFET","status":"ALREADY_CLAIMED"}]}
-
+  
 
   """
 
   alias TwitchApi.MyFinch
   alias TwitchApi.ApiJson.Template.Method.Headers
+
 
   @doc """
   ### Description:
@@ -35,31 +36,25 @@ defmodule TwitchApi.Entitlements.RedeemCode do
   """
 
   @typedoc """
-  The code to redeem to the authenticated user’s account.A fifteen character (plus optional hyphen separators) alphanumeric string, e.g. ABCDE-12345-FGHIJRepeat this query parameter additional times to redeem multiple codes.Ex: ?code=code1&code=code21-20 code parameters are allowed.
-  """
+      The code to redeem to the authenticated user’s account.A fifteen character (plus optional hyphen separators) alphanumeric string, e.g. ABCDE-12345-FGHIJRepeat this query parameter additional times to redeem multiple codes.Ex: ?code=code1&code=code21-20 code parameters are allowed.
+      """
   @type code :: %{required(:code) => String.t()}
 
   @typedoc """
-  Represents a numeric Twitch user ID.The user account which is going to receive the entitlement associated with the code.
-  """
+      Represents a numeric Twitch user ID.The user account which is going to receive the entitlement associated with the code.
+      """
   @type user_id :: %{required(:user_id) => integer}
 
-  @spec call(code | user_id) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
+  
+  @spec call(code | user_id) :: {:ok, Finch.Response.t} | {:error, Exception.t}
   def call(%{code: code}) do
-    MyFinch.request(
-      "POST",
-      "https://api.twitch.tv/helix/entitlements/codes?code=#{code}",
-      Headers.config_headers(),
-      nil
-    )
+    MyFinch.request("POST","https://api.twitch.tv/helix/entitlements/codes?code=#{code}",
+    Headers.config_headers(), nil)
   end
 
   def call(%{user_id: user_id}) do
-    MyFinch.request(
-      "POST",
-      "https://api.twitch.tv/helix/entitlements/codes?user_id=#{user_id}",
-      Headers.config_headers(),
-      nil
-    )
+    MyFinch.request("POST","https://api.twitch.tv/helix/entitlements/codes?user_id=#{user_id}",
+    Headers.config_headers(), nil)
   end
+
 end

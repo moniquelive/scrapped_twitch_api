@@ -5,24 +5,25 @@ defmodule TwitchApi.Teams.GetChannelTeams do
   ## Example request from twitch api docs:
   ### descriptions:
   Retrieves a list of Twitch Teams that the broadcaster CSharpFritz belongs to.
-
+  
   ### requests:
   curl -X GET 'https://api.twitch.tv/helix/teams/channel?broadcaster_id=96909659'  
    -H'Authorization: Bearer 2gbdx6oar67tqtcmt49t3wpcgycthx'  
    -H'Client-Id: wbmytr93xzw8zbg0p1izqyzzc5mbiz'
-
+  
 
   ## Example response from twitch api docs:
   ### descriptions:
-
+  
   ### responses:
   {"data":[{"broadcaster_id":"96909659","broadcaster_name":"CSharpFritz","broadcaster_login":"csharpfritz","background_image_url":null,"banner":null,"created_at":"2019-02-11T12:09:22Z","updated_at":"2020-11-18T15:56:41Z","info":"<p>An outgoing and enthusiastic group of friendly channels that write code, teach about technology, and promote the technical community.</p>","thumbnail_url":"https://static-cdn.jtvnw.net/jtv_user_pictures/team-livecoders-team_logo_image-bf1d9a87ca81432687de60e24ad9593d-600x600.png","team_name":"livecoders","team_display_name":"Live Coders","id":"6358"}]}
-
+  
 
   """
 
   alias TwitchApi.MyFinch
   alias TwitchApi.ApiJson.Template.Method.Headers
+
 
   @doc """
   ### Description:
@@ -32,21 +33,19 @@ defmodule TwitchApi.Teams.GetChannelTeams do
   User OAuth Token or App Access Token
 
   ### Required authorization:
-
+  
   """
 
   @typedoc """
-  User ID for a Twitch user.
-  """
+      User ID for a Twitch user.
+      """
   @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
 
-  @spec call(broadcaster_id) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
+  
+  @spec call(broadcaster_id) :: {:ok, Finch.Response.t} | {:error, Exception.t}
   def call(%{broadcaster_id: broadcaster_id}) do
-    MyFinch.request(
-      "GET",
-      "https://api.twitch.tv/helix/teams/channel?broadcaster_id=#{broadcaster_id}",
-      Headers.config_headers(),
-      nil
-    )
+    MyFinch.request("GET","https://api.twitch.tv/helix/teams/channel?broadcaster_id=#{broadcaster_id}",
+    Headers.config_headers(), nil)
   end
+
 end

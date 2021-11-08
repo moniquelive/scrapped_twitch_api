@@ -5,25 +5,26 @@ defmodule TwitchApi.Moderation.GetBannedUsers do
   ## Example request from twitch api docs:
   ### descriptions:
   Gets the users who have been banned by Broadcaster 198704263.
-
+  
   ### requests:
   curl -X GET 'https://api.twitch.tv/helix/moderation/banned?broadcaster_id=198704263'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
    -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'
-
+  
 
   ## Example response from twitch api docs:
   ### descriptions:
   Shows that users glowillig and quotrok have been banned.
-
+  
   ### responses:
   {"data":[{"user_id":"423374343","user_login":"glowillig","user_name":"glowillig","expires_at":"2022-03-15T02:00:28Z","reason":"Does not like pineapple on pizza.","moderator_id":"141981764","moderator_login":"twitchdev","moderator_name":"TwitchDev"},{"user_id":"424596340","user_login":"quotrok","user_name":"quotrok","expires_at":"2022-08-07T02:07:55Z","reason":"Inappropriate words.","moderator_id":"141981764","moderator_login":"twitchdev","moderator_name":"TwitchDev"},...],"pagination":{"cursor":"eyJiIjpudWxsLCJhIjp7IkN1cnNvciI6IjEwMDQ3MzA2NDo4NjQwNjU3MToxSVZCVDFKMnY5M1BTOXh3d1E0dUdXMkJOMFcifX0"}}
-
+  
 
   """
 
   alias TwitchApi.MyFinch
   alias TwitchApi.ApiJson.Template.Method.Headers
+
 
   @doc """
   ### Description:
@@ -34,34 +35,35 @@ defmodule TwitchApi.Moderation.GetBannedUsers do
   Required scope: moderation:read
 
   ### Required authorization:
-
+  
   """
 
   @typedoc """
-  Provided broadcaster_id must match the user_id in the OAuth token.
-  """
+      Provided broadcaster_id must match the user_id in the OAuth token.
+      """
   @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
 
   @typedoc """
-  Filters the results and only returns a status object for users who are banned in the channel and have a matching user_id.Multiple user IDs can be provided, e.g. /moderation/banned/events?broadcaster_id=1&user_id=2&user_id=3Maximum: 100.
-  """
+      Filters the results and only returns a status object for users who are banned in the channel and have a matching user_id.Multiple user IDs can be provided, e.g. /moderation/banned/events?broadcaster_id=1&user_id=2&user_id=3Maximum: 100.
+      """
   @type user_id :: %{required(:user_id) => String.t()}
 
   @typedoc """
-  Maximum number of objects to return.Maximum: 100.Default: 1.
-  """
+      Maximum number of objects to return.Maximum: 100.Default: 1.
+      """
   @type first :: %{required(:first) => String.t()}
 
   @typedoc """
-  Cursor for forward pagination: tells the server where to start fetching the next set of results in a multi-page response. This applies only to queries without user_id. If a user_id is specified, it supersedes any cursor/offset combinations. The cursor value specified here is from the pagination response field of a prior query.
-  """
+      Cursor for forward pagination: tells the server where to start fetching the next set of results in a multi-page response. This applies only to queries without user_id. If a user_id is specified, it supersedes any cursor/offset combinations. The cursor value specified here is from the pagination response field of a prior query.
+      """
   @type after_query_param :: %{required(:after_query_param) => String.t()}
 
   @typedoc """
-  Cursor for backward pagination: tells the server where to start fetching the next set of results in a multi-page response. This applies only to queries without user_id. If a user_id is specified, it supersedes any cursor/offset. combinations. The cursor value specified here is from the pagination response field of a prior query.
-  """
+      Cursor for backward pagination: tells the server where to start fetching the next set of results in a multi-page response. This applies only to queries without user_id. If a user_id is specified, it supersedes any cursor/offset. combinations. The cursor value specified here is from the pagination response field of a prior query.
+      """
   @type before :: %{required(:before) => String.t()}
 
+  
   @typedoc """
   Map containing the user needed information for the fetch of the required user OAuth access token.
   You will be able to choose from one way or the other for fetching previously OAuth access tokens.
@@ -70,50 +72,30 @@ defmodule TwitchApi.Moderation.GetBannedUsers do
   """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
 
-  @spec call(broadcaster_id | user_id | first | after_query_param | before, user_info) ::
-          {:ok, Finch.Response.t()} | {:error, Exception.t()}
+  @spec call(broadcaster_id | user_id | first | after_query_param | before, user_info) :: {:ok, Finch.Response.t} | {:error, Exception.t}
   def call(%{broadcaster_id: broadcaster_id}, user_info) do
-    MyFinch.request(
-      "GET",
-      "https://api.twitch.tv/helix/moderation/banned?broadcaster_id=#{broadcaster_id}",
-      Headers.config_oauth_headers(user_info),
-      nil
-    )
+    MyFinch.request("GET","https://api.twitch.tv/helix/moderation/banned?broadcaster_id=#{broadcaster_id}",
+    Headers.config_oauth_headers(user_info), nil)
   end
 
   def call(%{user_id: user_id}, user_info) do
-    MyFinch.request(
-      "GET",
-      "https://api.twitch.tv/helix/moderation/banned?user_id=#{user_id}",
-      Headers.config_oauth_headers(user_info),
-      nil
-    )
+    MyFinch.request("GET","https://api.twitch.tv/helix/moderation/banned?user_id=#{user_id}",
+    Headers.config_oauth_headers(user_info), nil)
   end
 
   def call(%{first: first}, user_info) do
-    MyFinch.request(
-      "GET",
-      "https://api.twitch.tv/helix/moderation/banned?first=#{first}",
-      Headers.config_oauth_headers(user_info),
-      nil
-    )
+    MyFinch.request("GET","https://api.twitch.tv/helix/moderation/banned?first=#{first}",
+    Headers.config_oauth_headers(user_info), nil)
   end
 
   def call(%{after: after_query_param}, user_info) do
-    MyFinch.request(
-      "GET",
-      "https://api.twitch.tv/helix/moderation/banned?after=#{after_query_param}",
-      Headers.config_oauth_headers(user_info),
-      nil
-    )
+    MyFinch.request("GET","https://api.twitch.tv/helix/moderation/banned?after=#{after_query_param}",
+    Headers.config_oauth_headers(user_info), nil)
   end
 
   def call(%{before: before}, user_info) do
-    MyFinch.request(
-      "GET",
-      "https://api.twitch.tv/helix/moderation/banned?before=#{before}",
-      Headers.config_oauth_headers(user_info),
-      nil
-    )
+    MyFinch.request("GET","https://api.twitch.tv/helix/moderation/banned?before=#{before}",
+    Headers.config_oauth_headers(user_info), nil)
   end
+
 end

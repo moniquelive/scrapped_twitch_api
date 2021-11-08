@@ -5,7 +5,7 @@ defmodule TwitchApi.Predictions.CreatePrediction do
   ## Example request from twitch api docs:
   ### descriptions:
   Creates a Prediction for the TwitchDev channel.
-
+  
   ### requests:
   curl -X POST 'https://api.twitch.tv/helix/predictions'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
@@ -24,26 +24,27 @@ defmodule TwitchApi.Predictions.CreatePrediction do
     ],
     "prediction_window": 120,
    }'
-
+  
 
   ## Example response from twitch api docs:
   ### descriptions:
-
+  
   ### responses:
   {"data":[{"id":"bc637af0-7766-4525-9308-4112f4cbf178","broadcaster_id":"141981764","broadcaster_name":"TwitchDev","broadcaster_login":"twitchdev","title":"Any leeks in the stream?","winning_outcome_id":null,"outcomes":[{"id":"73085848-a94d-4040-9d21-2cb7a89374b7","title":"Yes, give it time.","users":0,"channel_points":0,"top_predictors":null,"color":"BLUE"},{"id":"906b70ba-1f12-47ea-9e95-e5f93d20e9cc","title":"Definitely not.","users":0,"channel_points":0,"top_predictors":null,"color":"PINK"}],"prediction_window":120,"status":"ACTIVE","created_at":"2021-04-28T17:11:22.595914172Z","ended_at":null,"locked_at":null}]}
-
+  
 
   """
 
   alias TwitchApi.MyFinch
   alias TwitchApi.ApiJson.Template.Method.Headers
 
+
   @doc """
   ### Description:
   NEW Create a Channel Points Prediction for a specific Twitch channel.
 
   ### Required authentication:
-
+  
 
   ### Required authorization:
   User OAuth tokenRequired scope: channel:manage:predictions
@@ -57,26 +58,14 @@ defmodule TwitchApi.Predictions.CreatePrediction do
   """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
 
-  # The broadcaster running Predictions. Provided broadcaster_id must match the user_id in the user OAuth token.Maximum =>  1
-  @spec call(
-          %{
-            required(:broadcaster_id) => String.t(),
-            # Array of outcome objects with titles for the Prediction. Array size must be 2. The first outcome object is the “blue” outcome and the second outcome object is the “pink” outcome when viewing the Prediction on Twitch.
-            required(:outcomes) => list(map),
-            # Total duration for the Prediction (in seconds).Minimum =>  1. Maximum =>  1800.
-            required(:prediction_window) => integer,
-            # Title for the Prediction.Maximum =>  45 characters.
-            required(:title) => String.t()
-          }
-          | nil,
-          user_info
-        ) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
+  @spec call(%{required(:broadcaster_id) => String.t(), # The broadcaster running Predictions. Provided broadcaster_id must match the user_id in the user OAuth token.Maximum =>  1
+    required(:outcomes) => list(map), # Array of outcome objects with titles for the Prediction. Array size must be 2. The first outcome object is the “blue” outcome and the second outcome object is the “pink” outcome when viewing the Prediction on Twitch.
+    required(:prediction_window) => integer, # Total duration for the Prediction (in seconds).Minimum =>  1. Maximum =>  1800.
+    required(:title) => String.t(), # Title for the Prediction.Maximum =>  45 characters.
+    }| nil, user_info) :: {:ok, Finch.Response.t} | {:error, Exception.t}
   def call(body_params, user_info) do
-    MyFinch.request(
-      "POST",
-      "https://api.twitch.tv/helix/predictions",
-      Headers.config_oauth_headers(user_info),
-      body_params
-    )
+    MyFinch.request("POST","https://api.twitch.tv/helix/predictions",
+    Headers.config_oauth_headers(user_info), body_params)
   end
+
 end

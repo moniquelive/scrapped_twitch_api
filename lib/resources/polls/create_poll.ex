@@ -5,7 +5,7 @@ defmodule TwitchApi.Polls.CreatePoll do
   ## Example request from twitch api docs:
   ### descriptions:
   Returns information for a specific poll created for the TwitchDev channel.
-
+  
   ### requests:
   curl -X POST 'https://api.twitch.tv/helix/polls'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
@@ -24,26 +24,27 @@ defmodule TwitchApi.Polls.CreatePoll do
     "channel_points_per_vote":100,
     "duration":1800
    }'
-
+  
 
   ## Example response from twitch api docs:
   ### descriptions:
-
+  
   ### responses:
   {"data":[{"id":"ed961efd-8a3f-4cf5-a9d0-e616c590cd2a","broadcaster_id":"141981764","broadcaster_name":"TwitchDev","broadcaster_login":"twitchdev","title":"Heads or Tails?","choices":[{"id":"4c123012-1351-4f33-84b7-43856e7a0f47","title":"Heads","votes":0,"channel_points_votes":0,"bits_votes":0},{"id":"279087e3-54a7-467e-bcd0-c1393fcea4f0","title":"Tails","votes":0,"channel_points_votes":0,"bits_votes":0}],"bits_voting_enabled":false,"bits_per_vote":0,"channel_points_voting_enabled":true,"channel_points_per_vote":100,"status":"ACTIVE","duration":1800,"started_at":"2021-03-19T06:08:33.871278372Z"}]}
-
+  
 
   """
 
   alias TwitchApi.MyFinch
   alias TwitchApi.ApiJson.Template.Method.Headers
 
+
   @doc """
   ### Description:
   NEW Create a poll for a specific Twitch channel.
 
   ### Required authentication:
-
+  
 
   ### Required authorization:
   User OAuth tokenRequired scope: channel:manage:polls
@@ -57,26 +58,14 @@ defmodule TwitchApi.Polls.CreatePoll do
   """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
 
-  # The broadcaster running polls. Provided broadcaster_id must match the user_id in the user OAuth token.Maximum =>  1
-  @spec call(
-          %{
-            required(:broadcaster_id) => String.t(),
-            # Array of the poll choices.Minimum =>  2 choices. Maximum =>  5 choices.
-            required(:choices) => list(map),
-            # Total duration for the poll (in seconds).Minimum =>  15. Maximum =>  1800.
-            required(:duration) => integer,
-            # Question displayed for the poll.Maximum =>  60 characters.
-            required(:title) => String.t()
-          }
-          | nil,
-          user_info
-        ) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
+  @spec call(%{required(:broadcaster_id) => String.t(), # The broadcaster running polls. Provided broadcaster_id must match the user_id in the user OAuth token.Maximum =>  1
+    required(:choices) => list(map), # Array of the poll choices.Minimum =>  2 choices. Maximum =>  5 choices.
+    required(:duration) => integer, # Total duration for the poll (in seconds).Minimum =>  15. Maximum =>  1800.
+    required(:title) => String.t(), # Question displayed for the poll.Maximum =>  60 characters.
+    }| nil, user_info) :: {:ok, Finch.Response.t} | {:error, Exception.t}
   def call(body_params, user_info) do
-    MyFinch.request(
-      "POST",
-      "https://api.twitch.tv/helix/polls",
-      Headers.config_oauth_headers(user_info),
-      body_params
-    )
+    MyFinch.request("POST","https://api.twitch.tv/helix/polls",
+    Headers.config_oauth_headers(user_info), body_params)
   end
+
 end

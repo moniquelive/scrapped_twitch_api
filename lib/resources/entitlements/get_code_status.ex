@@ -4,24 +4,25 @@ defmodule TwitchApi.Entitlements.GetCodeStatus do
 
   ## Example request from twitch api docs:
   ### descriptions:
-
+  
   ### requests:
   curl -X GET 'https://api.twitch.tv/helix/entitlements/codes?code=KUHXV-4GXYP-AKAKK&code=XZDDZ-5SIQR-RT5M3&user_id=156900877'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
    -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'
-
+  
 
   ## Example response from twitch api docs:
   ### descriptions:
-
+  
   ### responses:
   {"data":[{"code":"KUHXV-4GXYP-AKAKK","status":"UNUSED"},{"code":"XZDDZ-5SIQR-RT5M3","status":"ALREADY_CLAIMED"}]}
-
+  
 
   """
 
   alias TwitchApi.MyFinch
   alias TwitchApi.ApiJson.Template.Method.Headers
+
 
   @doc """
   ### Description:
@@ -35,31 +36,25 @@ defmodule TwitchApi.Entitlements.GetCodeStatus do
   """
 
   @typedoc """
-  The code to get the status of. Repeat this query parameter additional times to get the status of multiple codes.Ex: ?code=code1&code=code21-20 code parameters are allowed.
-  """
+      The code to get the status of. Repeat this query parameter additional times to get the status of multiple codes.Ex: ?code=code1&code=code21-20 code parameters are allowed.
+      """
   @type code :: %{required(:code) => String.t()}
 
   @typedoc """
-  Represents a numeric Twitch user ID.The user account which is going to receive the entitlement associated with the code.
-  """
+      Represents a numeric Twitch user ID.The user account which is going to receive the entitlement associated with the code.
+      """
   @type user_id :: %{required(:user_id) => integer}
 
-  @spec call(code | user_id) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
+  
+  @spec call(code | user_id) :: {:ok, Finch.Response.t} | {:error, Exception.t}
   def call(%{code: code}) do
-    MyFinch.request(
-      "GET",
-      "https://api.twitch.tv/helix/entitlements/codes?code=#{code}",
-      Headers.config_headers(),
-      nil
-    )
+    MyFinch.request("GET","https://api.twitch.tv/helix/entitlements/codes?code=#{code}",
+    Headers.config_headers(), nil)
   end
 
   def call(%{user_id: user_id}) do
-    MyFinch.request(
-      "GET",
-      "https://api.twitch.tv/helix/entitlements/codes?user_id=#{user_id}",
-      Headers.config_headers(),
-      nil
-    )
+    MyFinch.request("GET","https://api.twitch.tv/helix/entitlements/codes?user_id=#{user_id}",
+    Headers.config_headers(), nil)
   end
+
 end

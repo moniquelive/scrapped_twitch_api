@@ -4,7 +4,7 @@ defmodule TwitchApi.Extensions.SendExtensionPubSubMessage.NotSupported do
 
   ## Example request from twitch api docs:
   ### descriptions:
-
+  
   ### requests:
   curl -X POST 'https://api.twitch.tv/helix/extensions/pubsub'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
@@ -14,16 +14,17 @@ defmodule TwitchApi.Extensions.SendExtensionPubSubMessage.NotSupported do
     "broadcaster_id": "141981764",
     "target": ["broadcast"]
    }'
-
+  
 
   ## Example response from twitch api docs:
   ### descriptions:
-
+  
   ### responses:
   204NoContent
-
+  
 
   """
+
 
   # API method not supported
 end

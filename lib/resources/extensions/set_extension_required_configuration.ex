@@ -4,7 +4,7 @@ defmodule TwitchApi.Extensions.SetExtensionRequiredConfiguration.NotSupported do
 
   ## Example request from twitch api docs:
   ### descriptions:
-
+  
   ### requests:
   curl -X PUT 'https://api.twitch.tv/helix/extensions/required_configuration?broadcaster_id=274637212'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
@@ -14,16 +14,17 @@ defmodule TwitchApi.Extensions.SetExtensionRequiredConfiguration.NotSupported do
     "extension_id": "uo6dggojyb8d6soh92zknwmi5ej1q2",
     "extension_version": "0.0.1"
    }'
-
+  
 
   ## Example response from twitch api docs:
   ### descriptions:
-
+  
   ### responses:
   204NoContent
-
+  
 
   """
+
 
   # API method not supported
 end

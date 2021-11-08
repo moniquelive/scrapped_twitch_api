@@ -5,25 +5,26 @@ defmodule TwitchApi.Users.GetUserBlockList do
   ## Example request from twitch api docs:
   ### descriptions:
   This example gets a list of users blocked by the specified user.
-
+  
   ### requests:
   curl -X GET 'https://api.twitch.tv/helix/users/blocks?broadcaster_id=141981764'  
    -H'Authorization: Bearer 2gbdx6oar67tqtcmt49t3wpcgycthx'  
    -H'Client-Id: wbmytr93xzw8zbg0p1izqyzzc5mbiz'  
    
-
+  
 
   ## Example response from twitch api docs:
   ### descriptions:
-
+  
   ### responses:
   {"data":[{"user_id":"135093069","user_login":"bluelava","display_name":"BlueLava"},{"user_id":"27419011","user_login":"travistyoj","display_name":"TravistyOJ"}]}
-
+  
 
   """
 
   alias TwitchApi.MyFinch
   alias TwitchApi.ApiJson.Template.Method.Headers
+
 
   @doc """
   ### Description:
@@ -34,24 +35,25 @@ defmodule TwitchApi.Users.GetUserBlockList do
   Required scope: user:read:blocked_users
 
   ### Required authorization:
-
+  
   """
 
   @typedoc """
-  User ID for a Twitch user.
-  """
+      User ID for a Twitch user.
+      """
   @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
 
   @typedoc """
-  Maximum number of objects to return. Maximum: 100. Default: 20.
-  """
+      Maximum number of objects to return. Maximum: 100. Default: 20.
+      """
   @type first :: %{required(:first) => integer}
 
   @typedoc """
-  Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
-  """
+      Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+      """
   @type after_query_param :: %{required(:after_query_param) => String.t()}
 
+  
   @typedoc """
   Map containing the user needed information for the fetch of the required user OAuth access token.
   You will be able to choose from one way or the other for fetching previously OAuth access tokens.
@@ -60,32 +62,20 @@ defmodule TwitchApi.Users.GetUserBlockList do
   """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
 
-  @spec call(broadcaster_id | first | after_query_param, user_info) ::
-          {:ok, Finch.Response.t()} | {:error, Exception.t()}
+  @spec call(broadcaster_id | first | after_query_param, user_info) :: {:ok, Finch.Response.t} | {:error, Exception.t}
   def call(%{broadcaster_id: broadcaster_id}, user_info) do
-    MyFinch.request(
-      "GET",
-      "https://api.twitch.tv/helix/users/blocks?broadcaster_id=#{broadcaster_id}",
-      Headers.config_oauth_headers(user_info),
-      nil
-    )
+    MyFinch.request("GET","https://api.twitch.tv/helix/users/blocks?broadcaster_id=#{broadcaster_id}",
+    Headers.config_oauth_headers(user_info), nil)
   end
 
   def call(%{first: first}, user_info) do
-    MyFinch.request(
-      "GET",
-      "https://api.twitch.tv/helix/users/blocks?first=#{first}",
-      Headers.config_oauth_headers(user_info),
-      nil
-    )
+    MyFinch.request("GET","https://api.twitch.tv/helix/users/blocks?first=#{first}",
+    Headers.config_oauth_headers(user_info), nil)
   end
 
   def call(%{after: after_query_param}, user_info) do
-    MyFinch.request(
-      "GET",
-      "https://api.twitch.tv/helix/users/blocks?after=#{after_query_param}",
-      Headers.config_oauth_headers(user_info),
-      nil
-    )
+    MyFinch.request("GET","https://api.twitch.tv/helix/users/blocks?after=#{after_query_param}",
+    Headers.config_oauth_headers(user_info), nil)
   end
+
 end

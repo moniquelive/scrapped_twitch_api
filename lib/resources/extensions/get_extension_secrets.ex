@@ -4,21 +4,22 @@ defmodule TwitchApi.Extensions.GetExtensionSecrets.NotSupported do
 
   ## Example request from twitch api docs:
   ### descriptions:
-
+  
   ### requests:
   curl -X GET 'https://api.twitch.tv/helix/extensions/jwt/secrets?extension_id=uo6dggojyb8d6soh92zknwmi5ej1q2'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
    -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'
-
+  
 
   ## Example response from twitch api docs:
   ### descriptions:
-
+  
   ### responses:
   {"data":[{"format_version":1,"secrets":[{"content":"secret","active_at":"2021-03-29T06:58:40.858343036Z","expires_at":"2121-03-05T06:58:40.858343036Z"}]}]}
-
+  
 
   """
+
 
   # API method not supported
 end

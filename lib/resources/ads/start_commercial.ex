@@ -5,7 +5,7 @@ defmodule TwitchApi.Ads.StartCommercial do
   ## Example request from twitch api docs:
   ### descriptions:
   This request starts a commercial.
-
+  
   ### requests:
   curl -X POST 'https://api.twitch.tv/helix/channels/commercial'  
    -H'Authorization: Bearer 2gbdx6oar67tqtcmt49t3wpcgycthx'  
@@ -15,19 +15,20 @@ defmodule TwitchApi.Ads.StartCommercial do
     "broadcaster_id": "41245072",
     "length": 60
    }'
-
+  
 
   ## Example response from twitch api docs:
   ### descriptions:
-
+  
   ### responses:
   {"data":[{"length":60,"message":"","retry_after":480}]}
-
+  
 
   """
 
   alias TwitchApi.MyFinch
   alias TwitchApi.ApiJson.Template.Method.Headers
+
 
   @doc """
   ### Description:
@@ -38,7 +39,7 @@ defmodule TwitchApi.Ads.StartCommercial do
   Required scope: channel:edit:commercial
 
   ### Required authorization:
-
+  
   """
 
   @typedoc """
@@ -49,22 +50,12 @@ defmodule TwitchApi.Ads.StartCommercial do
   """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
 
-  # ID of the channel requesting a commercialMinimum =>  1 Maximum =>  1
-  @spec call(
-          %{
-            required(:broadcaster_id) => String.t(),
-            # Desired length of the commercial in seconds. Valid options are 30 60 90 120 150 180.
-            required(:length) => integer
-          }
-          | nil,
-          user_info
-        ) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
+  @spec call(%{required(:broadcaster_id) => String.t(), # ID of the channel requesting a commercialMinimum =>  1 Maximum =>  1
+    required(:length) => integer, # Desired length of the commercial in seconds. Valid options are 30 60 90 120 150 180.
+    }| nil, user_info) :: {:ok, Finch.Response.t} | {:error, Exception.t}
   def call(body_params, user_info) do
-    MyFinch.request(
-      "POST",
-      "https://api.twitch.tv/helix/channels/commercial",
-      Headers.config_oauth_headers(user_info),
-      body_params
-    )
+    MyFinch.request("POST","https://api.twitch.tv/helix/channels/commercial",
+    Headers.config_oauth_headers(user_info), body_params)
   end
+
 end
