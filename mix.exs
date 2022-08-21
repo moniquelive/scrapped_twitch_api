@@ -54,7 +54,7 @@ defmodule TwitchApi.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:jason, "~> 1.2.2"},
+      {:jason, "~> 1.2"},
       {:ecto, "~> 3.7.0"},
       {:finch, "~> 0.9"},
       {:cowboy, "~> 2.9.0"},
