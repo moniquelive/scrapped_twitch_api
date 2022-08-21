@@ -35,11 +35,10 @@ defmodule TwitchApi.Users.GetUsersFollows do
 
   """
 
-  @spec call() :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
-  def call do
+  def call(%{from_id: from_id, to_id: to_id}) do
     MyFinch.request(
       "GET",
-      "https://api.twitch.tv/helix/users/follows",
+      "https://api.twitch.tv/helix/users/follows?from_id=#{from_id}&to_id=#{to_id}",
       Headers.config_headers(),
       nil
     )
