@@ -53,9 +53,9 @@ defmodule TwitchApi.Channels.ModifyChannelInformation do
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
 
   # @spec call(broadcaster_id, user_info) :: {:ok, Finch.Response.t} | {:error, Exception.t}
-  def call(%{broadcaster_id: broadcaster_id}, channel_info) do
+  def call(%{broadcaster_id: broadcaster_id}, user_name, channel_info) do
     MyFinch.request("PATCH","https://api.twitch.tv/helix/channels?broadcaster_id=#{broadcaster_id}",
-    Headers.config_headers() ++ [{"content-type", "application/json"}], channel_info)
+    Headers.config_oauth_headers(user_name) ++ [{"content-type", "application/json"}], channel_info)
   end
 
 end
