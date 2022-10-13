@@ -5,7 +5,7 @@ defmodule TwitchApi.ChannelPoints.UpdateRedemptionStatus do
   ## Example request from twitch api docs:
   ### descriptions:
   This request updates custom reward redemption status.
-  
+
   ### requests:
   curl --X PATCH 'https://api.twitch.tv/helix/channel_points/custom_rewards/redemptions?broadcaster_id=274637212&reward_id=92af127c-7326-4483-a52b-b0da0be61c01&id=17fa2df1-ad76-4804-bfa5-a40ef63efe63'  
    -H'client-id: gx2pv4208cff0ig9ou7nk3riccffxt'  
@@ -14,20 +14,19 @@ defmodule TwitchApi.ChannelPoints.UpdateRedemptionStatus do
    -d'{
     "status": "CANCELED"
    }'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   {"data":[{"broadcaster_name":"torpedo09","broadcaster_login":"torpedo09","broadcaster_id":"274637212","id":"17fa2df1-ad76-4804-bfa5-a40ef63efe63","user_id":"274637212","user_name":"torpedo09","user_login":"torpedo09","user_input":"","status":"CANCELED","redeemed_at":"2020-07-01T18:37:32Z","reward":{"id":"92af127c-7326-4483-a52b-b0da0be61c01","title":"game analysis","prompt":"","cost":50000}}]}
-  
+
 
   """
 
   alias TwitchApi.MyFinch
   alias TwitchApi.ApiJson.Template.Method.Headers
-
 
   @doc """
   ### Description:
@@ -38,25 +37,24 @@ defmodule TwitchApi.ChannelPoints.UpdateRedemptionStatus do
   Required scope: channel:manage:redemptions
 
   ### Required authorization:
-  
+
   """
 
   @typedoc """
-      ID of the Custom Reward Redemption to update, must match a Custom Reward Redemption on broadcaster_id’s channel. Maximum: 50.
-      """
+  ID of the Custom Reward Redemption to update, must match a Custom Reward Redemption on broadcaster_id’s channel. Maximum: 50.
+  """
   @type id :: %{required(:id) => String.t()}
 
   @typedoc """
-      Provided broadcaster_id must match the user_id in the user OAuth token.
-      """
+  Provided broadcaster_id must match the user_id in the user OAuth token.
+  """
   @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
 
   @typedoc """
-      ID of the Custom Reward the redemptions to be updated are for.
-      """
+  ID of the Custom Reward the redemptions to be updated are for.
+  """
   @type reward_id :: %{required(:reward_id) => String.t()}
 
-  
   @typedoc """
   Map containing the user needed information for the fetch of the required user OAuth access token.
   You will be able to choose from one way or the other for fetching previously OAuth access tokens.
@@ -65,20 +63,32 @@ defmodule TwitchApi.ChannelPoints.UpdateRedemptionStatus do
   """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
 
-  @spec call(id | broadcaster_id | reward_id, user_info) :: {:ok, Finch.Response.t} | {:error, Exception.t}
+  @spec call(id | broadcaster_id | reward_id, user_info) ::
+          {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{id: id}, user_info) do
-    MyFinch.request("PATCH","https://api.twitch.tv/helix/channel_points/custom_rewards/redemptions?id=#{id}",
-    Headers.config_oauth_headers(user_info), nil)
+    MyFinch.request(
+      "PATCH",
+      "https://api.twitch.tv/helix/channel_points/custom_rewards/redemptions?id=#{id}",
+      Headers.config_oauth_headers(user_info),
+      nil
+    )
   end
 
   def call(%{broadcaster_id: broadcaster_id}, user_info) do
-    MyFinch.request("PATCH","https://api.twitch.tv/helix/channel_points/custom_rewards/redemptions?broadcaster_id=#{broadcaster_id}",
-    Headers.config_oauth_headers(user_info), nil)
+    MyFinch.request(
+      "PATCH",
+      "https://api.twitch.tv/helix/channel_points/custom_rewards/redemptions?broadcaster_id=#{broadcaster_id}",
+      Headers.config_oauth_headers(user_info),
+      nil
+    )
   end
 
   def call(%{reward_id: reward_id}, user_info) do
-    MyFinch.request("PATCH","https://api.twitch.tv/helix/channel_points/custom_rewards/redemptions?reward_id=#{reward_id}",
-    Headers.config_oauth_headers(user_info), nil)
+    MyFinch.request(
+      "PATCH",
+      "https://api.twitch.tv/helix/channel_points/custom_rewards/redemptions?reward_id=#{reward_id}",
+      Headers.config_oauth_headers(user_info),
+      nil
+    )
   end
-
 end

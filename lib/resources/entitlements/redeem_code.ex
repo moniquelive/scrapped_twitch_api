@@ -4,57 +4,62 @@ defmodule TwitchApi.Entitlements.RedeemCode do
 
   ## Example request from twitch api docs:
   ### descriptions:
-  
+
   ### requests:
-  curl -X POST 'https://api.twitch.tv/helix/entitlements/codes?code=8CD5P-V3J92-2S6JY&code=PUN4G-HYFVP-MMFET'  
+  curl -X POST 'https://api.twitch.tv/helix/entitlements/codes?user_id=12345&code=8CD5P-V3J92-2S6JY&code=PUN4G-HYFVP-MMFET'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
    -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   {"data":[{"code":"8CD5P-V3J92-2S6JY","status":"SUCCESSFULLY_REDEEMED"},{"code":"PUN4G-HYFVP-MMFET","status":"ALREADY_CLAIMED"}]}
-  
+
 
   """
 
   alias TwitchApi.MyFinch
   alias TwitchApi.ApiJson.Template.Method.Headers
 
-
   @doc """
   ### Description:
-  Redeems one or more provided codes to the authenticated Twitch user. This API requires that the caller is an authenticated Twitch user. This API requires that the caller is an authenticated Twitch user. The API is throttled to one request per second per authenticated user.
+  Redeems one or more redemption codes.
 
   ### Required authentication:
-  Access is controlled via an app access token on the calling service. The client ID associated with the app access token must be approved by Twitch.
+  Requires an App access token. Only client IDs approved by Twitch may redeem codes on behalf of any Twitch user account.
 
   ### Required authorization:
-  Callers with an app access token are authorized to redeem codes on behalf of any Twitch user account.
+
   """
 
   @typedoc """
-      The code to redeem to the authenticated user’s account.A fifteen character (plus optional hyphen separators) alphanumeric string, e.g. ABCDE-12345-FGHIJRepeat this query parameter additional times to redeem multiple codes.Ex: ?code=code1&code=code21-20 code parameters are allowed.
-      """
+  The redemption code to redeem. To redeem multiple codes, include this parameter for each redemption code. For example, code=1234&code=5678. You may specify a maximum of 20 codes.
+  """
   @type code :: %{required(:code) => String.t()}
 
   @typedoc """
-      Represents a numeric Twitch user ID.The user account which is going to receive the entitlement associated with the code.
-      """
-  @type user_id :: %{required(:user_id) => integer}
+  The ID of the user that owns the redemption code to redeem.
+  """
+  @type user_id :: %{required(:user_id) => String.t()}
 
-  
-  @spec call(code | user_id) :: {:ok, Finch.Response.t} | {:error, Exception.t}
+  @spec call(code | user_id) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{code: code}) do
-    MyFinch.request("POST","https://api.twitch.tv/helix/entitlements/codes?code=#{code}",
-    Headers.config_headers(), nil)
+    MyFinch.request(
+      "POST",
+      "https://api.twitch.tv/helix/entitlements/codes?code=#{code}",
+      Headers.config_headers(),
+      nil
+    )
   end
 
   def call(%{user_id: user_id}) do
-    MyFinch.request("POST","https://api.twitch.tv/helix/entitlements/codes?user_id=#{user_id}",
-    Headers.config_headers(), nil)
+    MyFinch.request(
+      "POST",
+      "https://api.twitch.tv/helix/entitlements/codes?user_id=#{user_id}",
+      Headers.config_headers(),
+      nil
+    )
   end
-
 end

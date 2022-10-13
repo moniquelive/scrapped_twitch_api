@@ -6,29 +6,28 @@ defmodule TwitchApi.Tags.ReplaceStreamTags do
   ### descriptions:
   This example applies two stream tags to channel 257788195.
   The response body is empty.
-  
+
   ### requests:
   curl -X PUT 'https://api.twitch.tv/helix/streams/tags?broadcaster_id=257788195'  
    -H'Authorization: Bearer 2gbdx6oar67tqtcmt49t3wpcgycthx'  
    -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'  
    -H'Content-Type: application/json'  
    -d'{"tag_ids":["621fb5bf-5498-4d8f-b4ac-db4d40d401bf","52d7e4cc-633d-46f5-818c-bb59102d9549"]}'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   # Twitch CLI examples that:# Adds two stream tags to the channel.
   twitch api put /streams/tags -qbroadcaster_id=1234567 -b'{"tag_ids":["621fb5bf-5498-4d8f-b4ac-db4d40d401bf", "52d7e4cc-633d-46f5-818c-bb59102d9549"]}'# Removes all stream tags from the channel.
   twitch api put /streams/tags -qbroadcaster_id=1234567 -b'{"tag_ids":[]}'
-  
+
 
   """
 
   alias TwitchApi.MyFinch
   alias TwitchApi.ApiJson.Template.Method.Headers
-
 
   @doc """
   ### Description:
@@ -40,15 +39,14 @@ defmodule TwitchApi.Tags.ReplaceStreamTags do
   .
 
   ### Required authorization:
-  
+
   """
 
   @typedoc """
-      The user ID of the channel to apply the tags to.
-      """
+  The user ID of the channel to apply the tags to.
+  """
   @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
 
-  
   @typedoc """
   Map containing the user needed information for the fetch of the required user OAuth access token.
   You will be able to choose from one way or the other for fetching previously OAuth access tokens.
@@ -57,10 +55,13 @@ defmodule TwitchApi.Tags.ReplaceStreamTags do
   """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
 
-  @spec call(broadcaster_id, user_info) :: {:ok, Finch.Response.t} | {:error, Exception.t}
+  @spec call(broadcaster_id, user_info) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{broadcaster_id: broadcaster_id}, user_info) do
-    MyFinch.request("PUT","https://api.twitch.tv/helix/streams/tags?broadcaster_id=#{broadcaster_id}",
-    Headers.config_oauth_headers(user_info), nil)
+    MyFinch.request(
+      "PUT",
+      "https://api.twitch.tv/helix/streams/tags?broadcaster_id=#{broadcaster_id}",
+      Headers.config_oauth_headers(user_info),
+      nil
+    )
   end
-
 end

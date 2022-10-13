@@ -5,25 +5,24 @@ defmodule TwitchApi.Users.GetUsersFollows do
   ## Example request from twitch api docs:
   ### descriptions:
   This gets the first 20 IDs of users who are following user 23161357.
-  
+
   ### requests:
   curl -X GET 'https://api.twitch.tv/helix/users/follows?to_id=23161357'  
    -H'Authorization: Bearer 2gbdx6oar67tqtcmt49t3wpcgycthx'  
    -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   {"total":12345,"data":[{"from_id":"171003792","from_login":"iiisutha067iii","from_name":"IIIsutha067III","to_id":"23161357","to_name":"LIRIK","followed_at":"2017-08-22T22:55:24Z"},{"from_id":"113627897","from_login":"birdman616","from_name":"Birdman616","to_id":"23161357","to_name":"LIRIK","followed_at":"2017-08-22T22:55:04Z"},...],"pagination":{"cursor":"eyJiIjpudWxsLCJhIjoiMTUwMzQ0MTc3NjQyNDQyMjAwMCJ9"}}
-  
+
 
   """
 
   alias TwitchApi.MyFinch
   alias TwitchApi.ApiJson.Template.Method.Headers
-
 
   @doc """
   ### Description:
@@ -33,14 +32,16 @@ defmodule TwitchApi.Users.GetUsersFollows do
   User OAuth Token or App Access Token
 
   ### Required authorization:
-  
+
   """
 
-  
-  @spec call() :: {:ok, Finch.Response.t} | {:error, Exception.t}
+  @spec call() :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call do
-    MyFinch.request("GET","https://api.twitch.tv/helix/users/follows",
-    Headers.config_headers(), nil)
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/users/follows",
+      Headers.config_headers(),
+      nil
+    )
   end
-
 end

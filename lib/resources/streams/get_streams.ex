@@ -6,7 +6,7 @@ defmodule TwitchApi.Streams.GetStreams do
   ### descriptions:
   This gets information about the 20 most active streams.
   This gets information about the next 20 most active streams, after the ones specified in the prior response. The request includes as its after value, the cursor returned in the prior response.
-  
+
   ### requests:
   curl -X GET
   'https://api.twitch.tv/helix/streams?user_login=afro&user_login=cohhcarnage&user_login=lana_lux'  
@@ -19,25 +19,24 @@ defmodule TwitchApi.Streams.GetStreams do
   curl -X GET 'https://api.twitch.tv/helix/streams'  
    -H'Authorization: Bearer 2gbdx6oar67tqtcmt49t3wpcgycthx'  
    -H'Client-Id: wbmytr93xzw8zbg0p1izqyzzc5mbiz'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
   This gets information about three different specified streams using the ability to pass multiple logins. If a provided user is not live, they will not be included in the response.
-  
+
   ### responses:
   {"data":[{"id":"40952121085","user_id":"101051819","user_login":"afro","user_name":"Afro","game_id":"32982","game_name":"Grand Theft Auto V","type":"live","title":"Jacob: Digital Den Laptops & Routers | NoPixel | !MAINGEAR !FCF","viewer_count":1490,"started_at":"2021-03-10T03:18:11Z","language":"en","thumbnail_url":"https://static-cdn.jtvnw.net/previews-ttv/live_user_afro-{width}x{height}.jpg","tag_ids":["6ea6bca4-4712-4ab9-a906-e3336a9d8039"],"is_mature":false},...],"pagination":{}}
   {"data":[{"id":"40944942733","user_id":"67931625","user_login":"amar","user_name":"Amar","game_id":"33214","game_name":"Fortnite","type":"live","title":"27h Stream Pringles Deathrun Map + 12k MK Turnier | !sub !JustLegends !Pc !yfood","viewer_count":14944,"started_at":"2021-03-09T16:59:39Z","language":"de","thumbnail_url":"https://static-cdn.jtvnw.net/previews-ttv/live_user_amar-{width}x{height}.jpg","tag_ids":["9166ad14-41f1-4b04-a3b8-c8eb838c6be6"],"is_mature":false},],"pagination":{"cursor":"eyJiIjp7IkN1cnNvciI6ImV5SnpJam94TkRrME5DNDFOekV5TXpBMU1UWTVNRElzSW1RaU9tWmhiSE5sTENKMElqcDBjblZsZlE9PSJ9LCJhIjp7IkN1cnNvciI6ImV5SnpJam81TlRFMkxqVTNOREF6TmpNNU9UTXpNaXdpWkNJNlptRnNjMlVzSW5RaU9uUnlkV1Y5In19"}}
   cursor
   after
   {"data":[{"id":"41375541868","user_id":"459331509","user_login":"auronplay","user_name":"auronplay","game_id":"494131","game_name":"Little Nightmares","type":"live","title":"hablamos y le damos a Little Nightmares 1","viewer_count":78365,"started_at":"2021-03-10T15:04:21Z","language":"es","thumbnail_url":"https://static-cdn.jtvnw.net/previews-ttv/live_user_auronplay-{width}x{height}.jpg","tag_ids":["d4bb9c58-2141-4881-bcdc-3fe0505457d1"],"is_mature":false},...],"pagination":{"cursor":"eyJiIjp7IkN1cnNvciI6ImV5SnpJam8zT0RNMk5TNDBORFF4TlRjMU1UY3hOU3dpWkNJNlptRnNjMlVzSW5RaU9uUnlkV1Y5In0sImEiOnsiQ3Vyc29yIjoiZXlKeklqb3hOVGs0TkM0MU56RXhNekExTVRZNU1ESXNJbVFpT21aaGJITmxMQ0owSWpwMGNuVmxmUT09In19"}}
-  
+
 
   """
 
   alias TwitchApi.MyFinch
   alias TwitchApi.ApiJson.Template.Method.Headers
-
 
   @doc """
   ### Description:
@@ -47,79 +46,106 @@ defmodule TwitchApi.Streams.GetStreams do
   OAuth or App Access Token required
 
   ### Required authorization:
-  
+
   """
 
   @typedoc """
-      Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
-      """
+  Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+  """
   @type after_query_param :: %{required(:after_query_param) => String.t()}
 
   @typedoc """
-      Cursor for backward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
-      """
+  Cursor for backward pagination: tells the server where to start fetching the next set of results, in a multi-page response. The cursor value specified here is from the pagination response field of a prior query.
+  """
   @type before :: %{required(:before) => String.t()}
 
   @typedoc """
-      Maximum number of objects to return. Maximum: 100. Default: 20.
-      """
+  Maximum number of objects to return. Maximum: 100. Default: 20.
+  """
   @type first :: %{required(:first) => integer}
 
   @typedoc """
-      Returns streams broadcasting a specified game ID. You can specify up to 100 IDs.
-      """
+  Returns streams broadcasting a specified game ID. You can specify up to 100 IDs.
+  """
   @type game_id :: %{required(:game_id) => String.t()}
 
   @typedoc """
-      Stream language. You can specify up to 100 languages. A language value must be either the ISO 639-1 two-letter code for a supported stream language or “other”.
-      """
+  Stream language. You can specify up to 100 languages. A language value must be either the ISO 639-1 two-letter code for a supported stream language or “other”.
+  """
   @type language :: %{required(:language) => String.t()}
 
   @typedoc """
-      Returns streams broadcast by one or more specified user IDs. You can specify up to 100 IDs.
-      """
+  Returns streams broadcast by one or more specified user IDs. You can specify up to 100 IDs.
+  """
   @type user_id :: %{required(:user_id) => String.t()}
 
   @typedoc """
-      Returns streams broadcast by one or more specified user login names. You can specify up to 100 names.
-      """
+  Returns streams broadcast by one or more specified user login names. You can specify up to 100 names.
+  """
   @type user_login :: %{required(:user_login) => String.t()}
 
-  
-  @spec call(after_query_param | before | first | game_id | language | user_id | user_login) :: {:ok, Finch.Response.t} | {:error, Exception.t}
+  @spec call(after_query_param | before | first | game_id | language | user_id | user_login) ::
+          {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{after: after_query_param}) do
-    MyFinch.request("GET","https://api.twitch.tv/helix/streams?after=#{after_query_param}",
-    Headers.config_headers(), nil)
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/streams?after=#{after_query_param}",
+      Headers.config_headers(),
+      nil
+    )
   end
 
   def call(%{before: before}) do
-    MyFinch.request("GET","https://api.twitch.tv/helix/streams?before=#{before}",
-    Headers.config_headers(), nil)
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/streams?before=#{before}",
+      Headers.config_headers(),
+      nil
+    )
   end
 
   def call(%{first: first}) do
-    MyFinch.request("GET","https://api.twitch.tv/helix/streams?first=#{first}",
-    Headers.config_headers(), nil)
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/streams?first=#{first}",
+      Headers.config_headers(),
+      nil
+    )
   end
 
   def call(%{game_id: game_id}) do
-    MyFinch.request("GET","https://api.twitch.tv/helix/streams?game_id=#{game_id}",
-    Headers.config_headers(), nil)
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/streams?game_id=#{game_id}",
+      Headers.config_headers(),
+      nil
+    )
   end
 
   def call(%{language: language}) do
-    MyFinch.request("GET","https://api.twitch.tv/helix/streams?language=#{language}",
-    Headers.config_headers(), nil)
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/streams?language=#{language}",
+      Headers.config_headers(),
+      nil
+    )
   end
 
   def call(%{user_id: user_id}) do
-    MyFinch.request("GET","https://api.twitch.tv/helix/streams?user_id=#{user_id}",
-    Headers.config_headers(), nil)
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/streams?user_id=#{user_id}",
+      Headers.config_headers(),
+      nil
+    )
   end
 
   def call(%{user_login: user_login}) do
-    MyFinch.request("GET","https://api.twitch.tv/helix/streams?user_login=#{user_login}",
-    Headers.config_headers(), nil)
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/streams?user_login=#{user_login}",
+      Headers.config_headers(),
+      nil
+    )
   end
-
 end

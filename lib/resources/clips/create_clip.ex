@@ -4,25 +4,24 @@ defmodule TwitchApi.Clips.CreateClip do
 
   ## Example request from twitch api docs:
   ### descriptions:
-  
+
   ### requests:
   curl -X POST 'https://api.twitch.tv/helix/clips?broadcaster_id=44322889'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
    -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   {"data":[{"id":"FiveWordsForClipSlug","edit_url":"http://clips.twitch.tv/FiveWordsForClipSlug/edit"}]}
-  
+
 
   """
 
   alias TwitchApi.MyFinch
   alias TwitchApi.ApiJson.Template.Method.Headers
-
 
   @doc """
   ### Description:
@@ -33,20 +32,19 @@ defmodule TwitchApi.Clips.CreateClip do
   Required scope: clips:edit
 
   ### Required authorization:
-  
+
   """
 
   @typedoc """
-      ID of the stream from which the clip will be made.
-      """
+  ID of the stream from which the clip will be made.
+  """
   @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
 
   @typedoc """
-      If false, the clip is captured from the live stream when the API is called; otherwise, a delay is added before the clip is captured (to account for the brief delay between the broadcaster’s stream and the viewer’s experience of that stream). Default: false.
-      """
+  If false, the clip is captured from the live stream when the API is called; otherwise, a delay is added before the clip is captured (to account for the brief delay between the broadcaster’s stream and the viewer’s experience of that stream). Default: false.
+  """
   @type has_delay :: %{required(:has_delay) => boolean}
 
-  
   @typedoc """
   Map containing the user needed information for the fetch of the required user OAuth access token.
   You will be able to choose from one way or the other for fetching previously OAuth access tokens.
@@ -55,15 +53,23 @@ defmodule TwitchApi.Clips.CreateClip do
   """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
 
-  @spec call(broadcaster_id | has_delay, user_info) :: {:ok, Finch.Response.t} | {:error, Exception.t}
+  @spec call(broadcaster_id | has_delay, user_info) ::
+          {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{broadcaster_id: broadcaster_id}, user_info) do
-    MyFinch.request("POST","https://api.twitch.tv/helix/clips?broadcaster_id=#{broadcaster_id}",
-    Headers.config_oauth_headers(user_info), nil)
+    MyFinch.request(
+      "POST",
+      "https://api.twitch.tv/helix/clips?broadcaster_id=#{broadcaster_id}",
+      Headers.config_oauth_headers(user_info),
+      nil
+    )
   end
 
   def call(%{has_delay: has_delay}, user_info) do
-    MyFinch.request("POST","https://api.twitch.tv/helix/clips?has_delay=#{has_delay}",
-    Headers.config_oauth_headers(user_info), nil)
+    MyFinch.request(
+      "POST",
+      "https://api.twitch.tv/helix/clips?has_delay=#{has_delay}",
+      Headers.config_oauth_headers(user_info),
+      nil
+    )
   end
-
 end

@@ -5,58 +5,63 @@ defmodule TwitchApi.Moderation.CheckAutoModStatus do
   ## Example request from twitch api docs:
   ### descriptions:
   Checks to see if the messages “Hello World!” and “Boooooo!” meets AutoMod requirements.
-  
+
   ### requests:
-  curl -X POST 'https://api.twitch.tv/helix/moderation/enforcements/status'  
+  curl -X POST 'https://api.twitch.tv/helix/moderation/enforcements/status?broadcaster_id=12345'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
    -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'  
+   -H'Content-Type: application/json'  
    -d'{
     "data": [
       {
         "msg_id": "123",
-        "msg_text": "Hello World!",
-        "user_id": "23749"
+        "msg_text": "Hello World!"
       },
       {
         "msg_id": "393",
-        "msg_text": "Boooooo!",
-        "user_id": "23422"
+        "msg_text": "Boooooo!"
       }
     ]
    }'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
   Shows that message ID 123 meets the requirements and message ID 393 does not.
-  
+
   ### responses:
   {"data":[{"msg_id":"123","is_permitted":true},{"msg_id":"393","is_permitted":false}]}
-  
+
 
   """
 
   alias TwitchApi.MyFinch
   alias TwitchApi.ApiJson.Template.Method.Headers
 
-
   @doc """
   ### Description:
   Determines whether a string message meets the channel’s AutoMod requirements.
 
   ### Required authentication:
-  
+
 
   ### Required authorization:
   OAuth token requiredRequired Scope: moderation:read
   """
 
   @typedoc """
-      Provided broadcaster_id must match the user_id in the auth token.
-      """
+  Provided broadcaster_id must match the user_id in the auth token.
+  """
   @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
 
-  
+  # Developer-generated identifier for mapping messages to results.
+  @typep body_params ::
+           %{
+             required(:msg_id) => String.t(),
+             # Message text.
+             required(:msg_text) => String.t()
+           }
+           | nil
   @typedoc """
   Map containing the user needed information for the fetch of the required user OAuth access token.
   You will be able to choose from one way or the other for fetching previously OAuth access tokens.
@@ -65,10 +70,14 @@ defmodule TwitchApi.Moderation.CheckAutoModStatus do
   """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
 
-  @spec call(broadcaster_id, user_info) :: {:ok, Finch.Response.t} | {:error, Exception.t}
-  def call(%{broadcaster_id: broadcaster_id}, user_info) do
-    MyFinch.request("POST","https://api.twitch.tv/helix/moderation/enforcements/status?broadcaster_id=#{broadcaster_id}",
-    Headers.config_oauth_headers(user_info), nil)
+  @spec call(broadcaster_id, body_params, user_info) ::
+          {:ok, Finch.Response.t()} | {:error, Exception.t()}
+  def call(%{broadcaster_id: broadcaster_id}, body_params, user_info) do
+    MyFinch.request(
+      "POST",
+      "https://api.twitch.tv/helix/moderation/enforcements/status?broadcaster_id=#{broadcaster_id}",
+      Headers.config_oauth_headers(user_info),
+      body_params
+    )
   end
-
 end

@@ -5,35 +5,38 @@ defmodule TwitchApi.Predictions.EndPrediction do
   ## Example request from twitch api docs:
   ### descriptions:
   Ends a specific Prediction for the TwitchDev channel by setting the status to be resolved.
-  
+
   ### requests:
-  curl -X PATCH 'https://api.twitch.tv/helix/predictions'\ -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'\ -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'\ -H'Content-Type: application/json'\ -d'{
+  curl -X PATCH 'https://api.twitch.tv/helix/predictions'  
+   -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
+   -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'  
+   -H'Content-Type: application/json'  
+   -d'{
     "broadcaster_id": "141981764",
     "id": "bc637af0-7766-4525-9308-4112f4cbf178",
     "status": "RESOLVED",
     "winning_outcome_id": "73085848-a94d-4040-9d21-2cb7a89374b7"
    }'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   {"data":[{"id":"bc637af0-7766-4525-9308-4112f4cbf178","broadcaster_id":"141981764","broadcaster_name":"TwitchDev","broadcaster_login":"twitchdev","title":"Will we win all the games?","winning_outcome_id":"73085848-a94d-4040-9d21-2cb7a89374b7","outcomes":[{"id":"73085848-a94d-4040-9d21-2cb7a89374b7","title":"yes","users":0,"channel_points":0,"top_predictors":null,"color":"BLUE"},{"id":"86010b2e-9764-4136-9359-fd1c9c5a8033","title":"no","users":0,"channel_points":0,"top_predictors":null,"color":"PINK"}],"prediction_window":120,"status":"RESOLVED","created_at":"2021-04-28T21:48:19.480371331Z","ended_at":"2021-04-28T21:54:24.026833954Z","locked_at":"2021-04-28T21:48:34.636685705Z"}]}
-  
+
 
   """
 
   alias TwitchApi.MyFinch
   alias TwitchApi.ApiJson.Template.Method.Headers
 
-
   @doc """
   ### Description:
-  NEW Lock, resolve, or cancel a Channel Points Prediction.
+  Lock, resolve, or cancel a Channel Points Prediction.
 
   ### Required authentication:
-  
+
 
   ### Required authorization:
   User OAuth tokenRequired scope: channel:manage:predictions
@@ -47,13 +50,24 @@ defmodule TwitchApi.Predictions.EndPrediction do
   """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
 
-  @spec call(%{required(:broadcaster_id) => String.t(), # The broadcaster running prediction events. Provided broadcaster_id must match the user_id in the user OAuth token.Maximum =>  1
-    required(:id) => String.t(), # ID of the Prediction.
-    required(:status) => String.t(), # The Prediction status to be set. Valid values => RESOLVED =>  A winning outcome has been chosen and the Channel Points have been distributed to the users who predicted the correct outcome.CANCELED =>  The Prediction has been canceled and the Channel Points have been refunded to participants.LOCKED =>  The Prediction has been locked and viewers can no longer make predictions.
-    }| nil, user_info) :: {:ok, Finch.Response.t} | {:error, Exception.t}
+  # The broadcaster running prediction events. Provided broadcaster_id must match the user_id in the user OAuth token.Maximum =>  1
+  @spec call(
+          %{
+            required(:broadcaster_id) => String.t(),
+            # ID of the Prediction.
+            required(:id) => String.t(),
+            # The Prediction status to be set. Valid values => RESOLVED =>  A winning outcome has been chosen and the Channel Points have been distributed to the users who predicted the correct outcome.CANCELED =>  The Prediction has been canceled and the Channel Points have been refunded to participants.LOCKED =>  The Prediction has been locked and viewers can no longer make predictions.
+            required(:status) => String.t()
+          }
+          | nil,
+          user_info
+        ) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(body_params, user_info) do
-    MyFinch.request("PATCH","https://api.twitch.tv/helix/predictions",
-    Headers.config_oauth_headers(user_info), body_params)
+    MyFinch.request(
+      "PATCH",
+      "https://api.twitch.tv/helix/predictions",
+      Headers.config_oauth_headers(user_info),
+      body_params
+    )
   end
-
 end

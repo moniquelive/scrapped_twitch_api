@@ -4,25 +4,24 @@ defmodule TwitchApi.Streams.GetStreamKey do
 
   ## Example request from twitch api docs:
   ### descriptions:
-  
+
   ### requests:
   curl -X GET 'https://api.twitch.tv/helix/streams/key'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
    -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   {"data":[{"stream_key":"live_44322889_a34ub37c8ajv98a0"},]}
-  
+
 
   """
 
   alias TwitchApi.MyFinch
   alias TwitchApi.ApiJson.Template.Method.Headers
-
 
   @doc """
   ### Description:
@@ -33,15 +32,14 @@ defmodule TwitchApi.Streams.GetStreamKey do
   Required scope: channel:read:stream_key
 
   ### Required authorization:
-  
+
   """
 
   @typedoc """
-      User ID of the broadcaster
-      """
+  User ID of the broadcaster
+  """
   @type broadcaster_id :: %{required(:broadcaster_id) => String.t()}
 
-  
   @typedoc """
   Map containing the user needed information for the fetch of the required user OAuth access token.
   You will be able to choose from one way or the other for fetching previously OAuth access tokens.
@@ -50,10 +48,13 @@ defmodule TwitchApi.Streams.GetStreamKey do
   """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
 
-  @spec call(broadcaster_id, user_info) :: {:ok, Finch.Response.t} | {:error, Exception.t}
+  @spec call(broadcaster_id, user_info) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{broadcaster_id: broadcaster_id}, user_info) do
-    MyFinch.request("GET","https://api.twitch.tv/helix/streams/key?broadcaster_id=#{broadcaster_id}",
-    Headers.config_oauth_headers(user_info), nil)
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/streams/key?broadcaster_id=#{broadcaster_id}",
+      Headers.config_oauth_headers(user_info),
+      nil
+    )
   end
-
 end

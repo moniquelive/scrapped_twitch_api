@@ -5,26 +5,25 @@ defmodule TwitchApi.Users.UnblockUser do
   ## Example request from twitch api docs:
   ### descriptions:
   This example unblocks a user with an ID of 198704263 on behalf of the authenticated user.
-  
+
   ### requests:
   curl -X DELETE 'https://api.twitch.tv/helix/users/blocks?target_user_id=198704263'  
    -H'Authorization: Bearer 2gbdx6oar67tqtcmt49t3wpcgycthx'  
    -H'Client-Id: wbmytr93xzw8zbg0p1izqyzzc5mbiz'  
    
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   204NoContent
-  
+
 
   """
 
   alias TwitchApi.MyFinch
   alias TwitchApi.ApiJson.Template.Method.Headers
-
 
   @doc """
   ### Description:
@@ -35,15 +34,14 @@ defmodule TwitchApi.Users.UnblockUser do
   Required scope: user:manage:blocked_users
 
   ### Required authorization:
-  
+
   """
 
   @typedoc """
-      User ID of the user to be unblocked.
-      """
+  User ID of the user to be unblocked.
+  """
   @type target_user_id :: %{required(:target_user_id) => String.t()}
 
-  
   @typedoc """
   Map containing the user needed information for the fetch of the required user OAuth access token.
   You will be able to choose from one way or the other for fetching previously OAuth access tokens.
@@ -52,10 +50,13 @@ defmodule TwitchApi.Users.UnblockUser do
   """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
 
-  @spec call(target_user_id, user_info) :: {:ok, Finch.Response.t} | {:error, Exception.t}
+  @spec call(target_user_id, user_info) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{target_user_id: target_user_id}, user_info) do
-    MyFinch.request("DELETE","https://api.twitch.tv/helix/users/blocks?target_user_id=#{target_user_id}",
-    Headers.config_oauth_headers(user_info), nil)
+    MyFinch.request(
+      "DELETE",
+      "https://api.twitch.tv/helix/users/blocks?target_user_id=#{target_user_id}",
+      Headers.config_oauth_headers(user_info),
+      nil
+    )
   end
-
 end

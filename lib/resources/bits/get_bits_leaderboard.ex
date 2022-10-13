@@ -5,25 +5,24 @@ defmodule TwitchApi.Bits.GetBitsLeaderboard do
   ## Example request from twitch api docs:
   ### descriptions:
   This gets information about the top two Bits leaderboard entries for the user specified by Bearer token cfabdegwdoklmawdzdo98xt2fo512y. Information is returned for the current week.
-  
+
   ### requests:
   curl -X GET 'https://api.twitch.tv/helix/bits/leaderboard?count=2&period=week'  
    -H'Authorization: Bearer 2gbdx6oar67tqtcmt49t3wpcgycthx'  
    -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   {"data":[{"user_id":"158010205","user_login":"tundracowboy","user_name":"TundraCowboy","rank":1,"score":12543},{"user_id":"7168163","user_login":"topramens","user_name":"Topramens","rank":2,"score":6900}],"date_range":{"started_at":"2018-02-05T08:00:00Z","ended_at":"2018-02-12T08:00:00Z"},"total":2}
-  
+
 
   """
 
   alias TwitchApi.MyFinch
   alias TwitchApi.ApiJson.Template.Method.Headers
-
 
   @doc """
   ### Description:
@@ -34,30 +33,29 @@ defmodule TwitchApi.Bits.GetBitsLeaderboard do
   Required scope: bits:read
 
   ### Required authorization:
-  
+
   """
 
   @typedoc """
-      Number of results to be returned. Maximum: 100. Default: 10.
-      """
+  Number of results to be returned. Maximum: 100. Default: 10.
+  """
   @type count :: %{required(:count) => integer}
 
   @typedoc """
-      Time period over which data is aggregated (PST time zone). This parameter interacts with started_at. Valid values follow. Default: "all"."day" – 00:00:00 on the day specified in started_at, through 00:00:00 on the following day."week" – 00:00:00 on Monday of the week specified in started_at, through 00:00:00 on the following Monday."month" – 00:00:00 on the first day of the month specified in started_at, through 00:00:00 on the first day of the following month."year" – 00:00:00 on the first day of the year specified in started_at, through 00:00:00 on the first day of the following year."all" – The lifetime of the broadcaster's channel. If this is specified (or used by default), started_at is ignored.
-      """
+  Time period over which data is aggregated (PST time zone). This parameter interacts with started_at. Valid values follow. Default: "all"."day" – 00:00:00 on the day specified in started_at, through 00:00:00 on the following day."week" – 00:00:00 on Monday of the week specified in started_at, through 00:00:00 on the following Monday."month" – 00:00:00 on the first day of the month specified in started_at, through 00:00:00 on the first day of the following month."year" – 00:00:00 on the first day of the year specified in started_at, through 00:00:00 on the first day of the following year."all" – The lifetime of the broadcaster's channel. If this is specified (or used by default), started_at is ignored.
+  """
   @type period :: %{required(:period) => String.t()}
 
   @typedoc """
-      Timestamp for the period over which the returned data is aggregated. Must be in RFC 3339 format. If this is not provided, data is aggregated over the current period; e.g., the current day/week/month/year. This value is ignored if period is "all".Any + operator should be URL encoded.Currently, the HH:MM:SS part of this value is used only to identify a given day in PST and otherwise ignored. For example, if the started_at value resolves to 5PM PST yesterday and period is "day", data is returned for all of yesterday.
-      """
+  Timestamp for the period over which the returned data is aggregated. Must be in RFC 3339 format. If this is not provided, data is aggregated over the current period; e.g., the current day/week/month/year. This value is ignored if period is "all".Any + operator should be URL encoded.Currently, the HH:MM:SS part of this value is used only to identify a given day in PST and otherwise ignored. For example, if the started_at value resolves to 5PM PST yesterday and period is "day", data is returned for all of yesterday.
+  """
   @type started_at :: %{required(:started_at) => String.t()}
 
   @typedoc """
-      ID of the user whose results are returned; i.e., the person who paid for the Bits.As long as count is greater than 1, the returned data includes additional users, with Bits amounts above and below the user specified by user_id.If user_id is not provided, the endpoint returns the Bits leaderboard data across top users (subject to the value of count).
-      """
+  ID of the user whose results are returned; i.e., the person who paid for the Bits.As long as count is greater than 1, the returned data includes additional users, with Bits amounts above and below the user specified by user_id.If user_id is not provided, the endpoint returns the Bits leaderboard data across top users (subject to the value of count).
+  """
   @type user_id :: %{required(:user_id) => String.t()}
 
-  
   @typedoc """
   Map containing the user needed information for the fetch of the required user OAuth access token.
   You will be able to choose from one way or the other for fetching previously OAuth access tokens.
@@ -66,25 +64,41 @@ defmodule TwitchApi.Bits.GetBitsLeaderboard do
   """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
 
-  @spec call(count | period | started_at | user_id, user_info) :: {:ok, Finch.Response.t} | {:error, Exception.t}
+  @spec call(count | period | started_at | user_id, user_info) ::
+          {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{count: count}, user_info) do
-    MyFinch.request("GET","https://api.twitch.tv/helix/bits/leaderboard?count=#{count}",
-    Headers.config_oauth_headers(user_info), nil)
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/bits/leaderboard?count=#{count}",
+      Headers.config_oauth_headers(user_info),
+      nil
+    )
   end
 
   def call(%{period: period}, user_info) do
-    MyFinch.request("GET","https://api.twitch.tv/helix/bits/leaderboard?period=#{period}",
-    Headers.config_oauth_headers(user_info), nil)
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/bits/leaderboard?period=#{period}",
+      Headers.config_oauth_headers(user_info),
+      nil
+    )
   end
 
   def call(%{started_at: started_at}, user_info) do
-    MyFinch.request("GET","https://api.twitch.tv/helix/bits/leaderboard?started_at=#{started_at}",
-    Headers.config_oauth_headers(user_info), nil)
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/bits/leaderboard?started_at=#{started_at}",
+      Headers.config_oauth_headers(user_info),
+      nil
+    )
   end
 
   def call(%{user_id: user_id}, user_info) do
-    MyFinch.request("GET","https://api.twitch.tv/helix/bits/leaderboard?user_id=#{user_id}",
-    Headers.config_oauth_headers(user_info), nil)
+    MyFinch.request(
+      "GET",
+      "https://api.twitch.tv/helix/bits/leaderboard?user_id=#{user_id}",
+      Headers.config_oauth_headers(user_info),
+      nil
+    )
   end
-
 end

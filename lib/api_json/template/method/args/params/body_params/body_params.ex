@@ -32,7 +32,7 @@ defmodule TwitchApi.ApiJson.Template.Method.Args.Params.Body do
     |> String.replace(~r/:/, " => ")
     |> String.replace(~r/two_dots_replace/, ":")
     |> Kernel.<>("| nil")
-    |> String.replace("},\n    | nil", "}| nil")
+    |> String.replace("},\n    | nil", "} | nil")
   end
 
   @spec parse_body_params_key_objects(map) :: map
@@ -85,6 +85,7 @@ defmodule TwitchApi.ApiJson.Template.Method.Args.Params.Body do
   end
 
   @spec parse_param_type(binary) :: String.t() | map
+  defp parse_param_type("String"), do: "String.t()"
   defp parse_param_type("string"), do: "String.t()"
   defp parse_param_type("integer"), do: "integer"
   defp parse_param_type("boolean"), do: "boolean"

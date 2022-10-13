@@ -4,28 +4,28 @@ defmodule TwitchApi.Extensions.SetExtensionConfigurationSegment.NotSupported do
 
   ## Example request from twitch api docs:
   ### descriptions:
-  
+
   ### requests:
   curl -X PUT 'https://api.twitch.tv/helix/extensions/configurations'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
    -H'Client-Id: uo6dggojyb8d6soh92zknwmi5ej1q2'  
+   -H'Content-Type: application/json'  
    -d'{
     "extension_id": "uo6dggojyb8d6soh92zknwmi5ej1q2",
     "segment": "global",
     "version": "0.0.1",
     "content": "hello config!"
    }'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   204NoContent
-  
+
 
   """
-
 
   # API method not supported
 end

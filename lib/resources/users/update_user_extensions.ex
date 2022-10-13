@@ -5,7 +5,7 @@ defmodule TwitchApi.Users.UpdateUserExtensions do
   ## Example request from twitch api docs:
   ### descriptions:
   This updates the installed extensions of the user specified by Bearer token cfabdegwdoklmawdzdo98xt2fo512y.
-  
+
   ### requests:
   curl -X PUT 'https://api.twitch.tv/helix/users/extensions'  
    -H'Authorization: Bearer cfabdegwdoklmawdzdo98xt2fo512y'  
@@ -51,20 +51,19 @@ defmodule TwitchApi.Users.UpdateUserExtensions do
       }
     }
    }'
-  
+
 
   ## Example response from twitch api docs:
   ### descriptions:
-  
+
   ### responses:
   {"data":{"panel":{"1":{"active":true,"id":"rh6jq1q334hqc2rr1qlzqbvwlfl3x0","version":"1.1.0","name":"TopClip"},"2":{"active":true,"id":"wi08ebtatdc7oj83wtl9uxwz807l8b","version":"1.1.8","name":"Streamlabs Leaderboard"},"3":{"active":true,"id":"naty2zwfp7vecaivuve8ef1hohh6bo","version":"1.0.9","name":"Streamlabs Stream Schedule & Countdown"}},"overlay":{"1":{"active":true,"id":"zfh2irvx2jb4s60f02jq0ajm8vwgka","version":"1.0.19","name":"Streamlabs"}},"component":{"1":{"active":true,"id":"lqnf3zxk0rv0g7gq92mtmnirjz2cjj","version":"0.0.1","name":"Dev Experience Test","x":0,"y":0},"2":{"active":false}}}}
-  
+
 
   """
 
   alias TwitchApi.MyFinch
   alias TwitchApi.ApiJson.Template.Method.Headers
-
 
   @doc """
   ### Description:
@@ -75,7 +74,7 @@ defmodule TwitchApi.Users.UpdateUserExtensions do
   Required scope: user:edit:broadcast
 
   ### Required authorization:
-  
+
   """
 
   @typedoc """
@@ -86,10 +85,13 @@ defmodule TwitchApi.Users.UpdateUserExtensions do
   """
   @type user_info :: %{user_id: integer | binary} | %{user_name: binary}
 
-  @spec call(user_info) :: {:ok, Finch.Response.t} | {:error, Exception.t}
+  @spec call(user_info) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(user_info) do
-    MyFinch.request("PUT","https://api.twitch.tv/helix/users/extensions",
-    Headers.config_oauth_headers(user_info), nil)
+    MyFinch.request(
+      "PUT",
+      "https://api.twitch.tv/helix/users/extensions",
+      Headers.config_oauth_headers(user_info),
+      nil
+    )
   end
-
 end
