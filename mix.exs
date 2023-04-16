@@ -4,7 +4,7 @@ defmodule TwitchApi.MixProject do
   def project do
     [
       app: :scrapped_twitch_api,
-      version: "0.1.2",
+      version: "0.1.3",
       elixir: "~> 1.12",
       description: description(),
       package: package(),
@@ -83,6 +83,7 @@ defmodule TwitchApi.MixProject do
 
   defp ex_docs_groups() do
     [
+      "Scrapped twitch api modules": Path.wildcard("lib/resources/*/*.ex"),
       "Twitch api template": [
         TwitchApi.ApiJson.Template
       ],

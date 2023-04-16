@@ -1,4 +1,4 @@
-use Mix.Config
+import Mix.Config
 
 config :scrapped_twitch_api,
   default_adapter: "https://dev.twitch.tv/docs/api/reference",
