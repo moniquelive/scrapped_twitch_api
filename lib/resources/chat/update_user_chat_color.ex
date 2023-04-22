@@ -41,12 +41,14 @@ defmodule TwitchApi.Chat.UpdateUserChatColor do
   @typedoc """
   The ID of the user whose chat color you want to update.
   """
-  @type user_id :: %{required(:user_id) => String.t()}
+
+  # @type user_id :: %{required(:user_id) => String.t()}
 
   @typedoc """
   The color to use for the user’s name in chat. All users may specify one of the following named color values.blueblue_violetcadet_bluechocolatecoraldodger_bluefirebrickgolden_rodgreenhot_pinkorange_redredsea_greenspring_greenyellow_greenTurbo and Prime users may specify a named color or a Hex color code like #9146FF. If you use a Hex color code, remember to URL encode it.
   """
-  @type color :: %{required(:color) => String.t()}
+
+  # @type color :: %{required(:color) => String.t()}
 
   @spec call(user_id, color) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{user_id: user_id} = user, %{color: color}) do
