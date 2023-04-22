@@ -50,7 +50,7 @@ defmodule TwitchApi.Chat.UpdateUserChatColor do
 
   # @type color :: %{required(:color) => String.t()}
 
-  @spec call(user_id, color) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
+  # @spec call(user_id, color) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
   def call(%{user_id: user_id} = user, %{color: color}) do
     MyFinch.request(
       "PUT",
