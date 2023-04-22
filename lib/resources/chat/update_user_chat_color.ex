@@ -48,21 +48,12 @@ defmodule TwitchApi.Chat.UpdateUserChatColor do
   """
   @type color :: %{required(:color) => String.t()}
 
-  @spec call(user_id | color) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
-  def call(%{user_id: user_id}) do
+  @spec call(user_id, color) :: {:ok, Finch.Response.t()} | {:error, Exception.t()}
+  def call(%{user_id: user_id} = user, %{color: color}) do
     MyFinch.request(
       "PUT",
-      "https://api.twitch.tv/helix/chat/color?user_id=#{user_id}",
-      Headers.config_headers(),
-      nil
-    )
-  end
-
-  def call(%{color: color}) do
-    MyFinch.request(
-      "PUT",
-      "https://api.twitch.tv/helix/chat/color?color=#{color}",
-      Headers.config_headers(),
+      "https://api.twitch.tv/helix/chat/color?user_id=#{user_id}&color=#{color}",
+      Headers.config_oauth_headers(user) ++ [{"content-type", "application/json"}],
       nil
     )
   end
