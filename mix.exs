@@ -55,11 +55,11 @@ defmodule TwitchApi.MixProject do
   defp deps do
     [
       {:jason, "~> 1.2"},
-      {:ecto, "~> 3.7.0"},
+      {:ecto, "~> 3.10.3"},
       {:finch, "~> 0.9"},
       {:cowboy, "~> 2.9.0"},
-      {:plug_cowboy, "~> 2.5.2"},
-      {:plug, "~> 1.12.1"},
+      {:plug_cowboy, "~> 2.6.1"},
+      {:plug, "~> 1.14"},
       {:uuid, "~> 1.1"},
       {:jose, "~> 1.11.2"}
     ] ++ dev_deps() ++ test_deps()
