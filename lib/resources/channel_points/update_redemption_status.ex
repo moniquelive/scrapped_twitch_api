@@ -91,4 +91,19 @@ defmodule TwitchApi.ChannelPoints.UpdateRedemptionStatus do
       nil
     )
   end
+
+  def call(
+        %{id: id},
+        %{broadcaster_id: broadcaster_id},
+        %{reward_id: reward_id},
+        status,
+        user_info
+      ) do
+    MyFinch.request(
+      "PATCH",
+      "https://api.twitch.tv/helix/channel_points/custom_rewards/redemptions?id=#{id}&broadcaster_id=#{broadcaster_id}&reward_id=#{reward_id}",
+      Headers.config_oauth_headers(user_info),
+      status
+    )
+  end
 end
