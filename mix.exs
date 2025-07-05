@@ -57,8 +57,9 @@ defmodule TwitchApi.MixProject do
       {:jason, "~> 1.2"},
       {:ecto, "~> 3.10.3"},
       {:finch, "~> 0.9"},
-      {:cowboy, "~> 2.9.0"},
-      {:plug_cowboy, "~> 2.6.1"},
+      {:cowlib, "~> 2.15.0"},
+      {:cowboy, "~> 2.13.0"},
+      {:plug_cowboy, "~> 2.7.0"},
       {:plug, "~> 1.14"},
       {:uuid, "~> 1.1"},
       {:jose, "~> 1.11.2"}
@@ -68,7 +69,7 @@ defmodule TwitchApi.MixProject do
   defp dev_deps do
     [
       {:dialyxir, "~> 1.1.0", only: :dev, runtime: false},
-      {:credo, "~> 1.5.6", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.7.12", only: [:dev, :test], runtime: false},
       {:inch_ex, "~> 0.5.6", only: :dev},
       {:ex_doc, "~> 0.25", only: :dev}
     ]
